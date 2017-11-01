@@ -1,129 +1,46 @@
 ---
-title: "DSS Fall 2017 Seminar 3"
+title: "DSS Fall 2017 Seminar 4"
 output: html_notebook
 authors: Chris & Christy
 ---
 
 ## Introduction
-This is the notebook for the third of four `R` seminar sessions for Fall 2017.
+This is the notebook for the final `R` seminar session for Fall 2017.
 
 ## Dependencies
-### New R Packages
-
-There is are three new `R` packages that we'll need for this week. The first, `mapproj`, is the dependency that we were missing at the end of the last session. The second, `RColorBrewer`, gives us access to a number of color schemes that are ideal for mapping spatial data. The third package, `tidycensus`, makes it easy to download spatial data about St. Louis (and any other city in the U.S.!).
-
-```{r}
-install.packages("mapproj")
-install.packages("RColorBrewer")
-install.packages("tidycensus")
-```
-
-Once they are installed, we can load them with the `library()` function:
-
-```{r}
-library(mapproj)       # tools for working with map projections
-library(RColorBrewer)  # color ramps
-library(tidycensus)    # accessing spatial data
-```
-
-### Other R Packages
 
 You will also need a number of other packages that we've worked with in the past sessions:
 
 ```{r}
-library(broom)     # tidying data
-library(dplyr)     # wrangling data
-library(ggplot2)   # plotting data
-library(maptools)  # tools for working with spatial data
-library(rgdal)     # work with shapefiles
-library(stlData)   # St. Louis spatial data
+# install using install.packages("tidyverse")
+library(broom)         # tidying data
+library(dplyr)         # wrangling data
+library(ggplot2)       # plotting data
+
+# install individually using install.packages()
+library(mapproj)       # tools for working with map projections
+library(maptools)      # tools for working with spatial data
+library(RColorBrewer)  # color ramps
+library(rgdal)         # work with shapefiles
+library(tidycensus)    # accessing spatial data
+
+# install using the devtools package
+# devtools::install_github("chris-prener/stlData")
+library(stlData)       # St. Louis spatial data
 ```
 
-If you are missing any of the first three packages, you need to install the `tidyverse` - `install.packages("tidyverse")`. If you are missing any of the last three packages, you need to install them individually. `maptools` and `rgdal` can be installed using the `install.packages()` function. `stlData` requires `devtools` to be installed: `devtools::install_github("chris-prener/stlData")`.
-
-If you have to install more packages, you can do that here:
-
-```{r}
-
-```
-
-
-## Review - Reading Geometric Data in R
+## Review - Getting Back to Where We Left Off
 We use the `rgdal` package to read shapefiles into `R`. These data must be in the **top-level** of your `R` project directory. To import one of our files, the `stlRivers` shapefile, we use the `readOGR()` function. We need to specify `dsn = "."` for each use of the function, and the layer should match the name of your shapefile.
 
-Once imported, these data will appear under the "Values" section of the global environment as an object named `import`. However, they are not in a data frame structure. We need to use the `broom` package's `tidy()` function to dis-aggregate these data and store them in a data frame. We'll do this based on a common ID variable named `HYDROID`:
+Once imported, these data will appear under the "Values" section of the global environment as an object named `import`. However, they are not in a data frame structure. We need to use the `broom` package's `tidy()` function to dis-aggregate these data and store them in a data frame. We'll do this based on a common ID variable named `GEOID`:
 
 ```{r}
-import <- readOGR(dsn = ".", layer = "stlRivers")
-rivers <- tidy(import, region = "HYDROID")
+import <- readOGR(dsn = ".", layer = "stlTract")
+rivers <- tidy(import, region = "GEOID")
 ```
 
-Now, you try importing the data from the `stlTract` shapefile using the `readOGR()` function into the `import` object. Then tidy them using the `tidy()` function and the common ID variable `GEOID`, and save the output into an object named `stlTract`:
+We also need to load our data on lead poisoning and 
 
-```{r}
-
-```
-
-### How have the data changed?
-
-It is worth pausing for a moment to reflect on how the `tidy()` process has altered our data. We can explore these changes with the structure, or `str()`, function:
-
-```{r}
-str(stlTract)
-```
-
-The data have been converted to a series of points that combine longitude and latitude (x,y) pairs. These are the vertices of each polygon. The `GEOID` variable we worked with above has been renamed `id`, and it is a character variable. These two details will be particularly important below.
-
-## Plotting Polygons
-
-We can create simple maps using `ggplot2` and the `geom_polygon()` function we introduced last week. For example, here is the rivers data we loaded above, which includes the Mississippi river (only the portion within the City of St. Louis) as well as the River des Peres:
-
-```{r}
-ggplot() +
-  geom_polygon(data = rivers, mapping = aes(x = long, y = lat, group = id)) +
-  coord_map()
-```
-
-Now try plotting just the census tracts in St. Louis using the `stlTract` data:
-
-```{r}
-
-```
-
-## Adding Color
-We tend to prefer maps that have a bit of color. Color choice is a complex subject, but one of the fundamental rules is to pick colors that make logical, cultural sense. For instance, it would *not* be culturally appropriate to map water using red when we traditionally use blue to symbolize water and water-related activities.
-
-There are two options for a `geom` to add color, one for the fill (`fill`) and one for the outline (`color`). Below, we've used hexadecimal values for a dark blue to change the color of the major rivers data.  
-
-```{r}
-ggplot() +
-  geom_polygon(data = rivers, mapping = aes(x = long, y = lat, group = id), 
-               fill = "#00009d", color = "#00009d") +
-  coord_map()
-```
-
-Now, you edit the code below to change the fill color of the census tracts to a complimentary shade of green (`#4f9d00`) and make the outline colors black. You can literally include the word `black` or you can use its hexadecimal value of `#000000`.
-
-```{r}
-ggplot() +
-  geom_polygon(data = stlTract, mapping = aes(x = long, y = lat, group = id)) +
-  coord_map()
-```
-
-You can look up hexadecimal values using the *fantastic* website [ColorHexa](http://www.colorhexa.com).
-
-## Combining Layers
-
-The code below combines the two maps we made above by layering geoms. `ggplot2` will draw the geoms from high to low, so you need to carefully specify the order. In this case, the tract data overlap the rivers, so they need to be drawn first before the hyrdological data.
-
-```{r}
-ggplot() +
-  geom_polygon(data = stlTract, mapping = aes(x = long, y = lat, group = id), 
-               fill = "#4f9d00", colour="black") +
-  geom_polygon(data = rivers, mapping = aes(x = long, y = lat, group = id), 
-               fill = "#00009d", color = "#00009d") +
-  coord_map()
-```
 
 ## Plotting Data
 ### Merging Data
