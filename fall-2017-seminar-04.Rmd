@@ -30,86 +30,64 @@ library(stlData)       # St. Louis spatial data
 ```
 
 ## Review - Getting Back to Where We Left Off
+### Reading in Geometric Data
 We use the `rgdal` package to read shapefiles into `R`. These data must be in the **top-level** of your `R` project directory. To import one of our files, the `stlRivers` shapefile, we use the `readOGR()` function. We need to specify `dsn = "."` for each use of the function, and the layer should match the name of your shapefile.
 
 Once imported, these data will appear under the "Values" section of the global environment as an object named `import`. However, they are not in a data frame structure. We need to use the `broom` package's `tidy()` function to dis-aggregate these data and store them in a data frame. We'll do this based on a common ID variable named `GEOID`:
 
 ```{r}
 import <- readOGR(dsn = ".", layer = "stlTract")
-rivers <- tidy(import, region = "GEOID")
+stlTract <- tidy(import, region = "GEOID")
 ```
 
-We also need to load our data on lead poisoning and 
+### Lead Poisoning Data
 
-
-## Plotting Data
-### Merging Data
-The first step towards plotting our down data is to load some tabular data that we want to map, and quickly explore it using the `str()` function. We are looking for a unique identification number for each row in the tabular data.
+We also need to load our data on lead poisoning and prepare it to be joined with the shapefile data:
 
 ```{r}
+# load data from package into global environment
 lead <- stlLead
-str(stlLead)
-```
 
-Note how `geoID` is a numeric variable. In order to map these data, we have to make two fundamental changes. The first is to rename `geoID` to `id` so that it matches the name of the similar variable in our `stlTract` data frame. The second change is to convert `geoID` from numeric to string. We identified both the name change to `id` and the fact that `id` is a character variable when we explored the newly created `stlTract` data above.
-
-To rename variables, we can use the `dplyr` package's `rename()` function. To re-code variables, we can use the `dplyr` package's `mutate()` function.
-
-To make these changes, we are going to use a pipe (`%>%`). Pipes make our code more readable - they can be read in paragraph or list-like form:
-
-1. We will take our `lead` data, *then*...
-2. We will rename the variable `geoID` to `id` in those `lead` data, *then*...
-3. We will recede `id` to character, and assign those changes onto the `id` variable (as opposed to making a new variable), *then*...
-4. We will assign all of these changes back onto the `lead` data frame (as opposed to making a new data frame object).
-
-Each time we say the word "then", we use a pipe (`%>%`) operator.
-
-```{r}
+# prepare for join
 lead %>%
   rename(id = geoID) %>%
   mutate(id = as.character(id)) -> lead
-```
 
-With these changes complete, we want to combine the `stlTract` data with the `lead` data. We'll use the variable that is now named and formatted identically in both data frames - `id`. The `left_join()` function from `dplyr` will take the `stlTract` data and add the `lead` variables to `stlTract`'s right side, assigning the `stlTract` vertices the data from the matching census tract in the `lead` data. We combine these two data frames into a new data frame named `leadMap`:
-
-```{r}
+# join tabular and geometric data
 leadMap <- left_join(stlTract, lead, by = "id")
 ```
 
-Now, you try replicating the three previous code blocks by:
-
-1. loading the `stlInsurance` data stored in the `stlData` package to a data frame named `insurance`
-2. renaming `geoID` to `id`
-3. re-coding `id` from numeric to string using `mutate()`
-4. assigning these changes to the `insurance` data frame
-5. using the `left_join()` function to combine the `stlTract` data with the `insurance` data into a new data frame named `insMap`:
-
-```{r}
-
-
-
-
-```
-
-### Plotting Quantities
-With our data now joined, we are ready to map them! First, we'll use the `leadMap` data frame to map the percentage of elevated blood lead level tests per census tract. These data are stored in the `pctElevated` variable. We use the `fill` option within the aesthetic mapping to accomplish this. It is the *only* change from our previous map, other than switching the data source.
+Once the join is complete, we can use `ggplot2` to map our data:
 
 ```{r}
 ggplot() +
-    geom_polygon(data = leadMap, mapping = aes(x = long, y = lat, group = id, 
-                                               fill = pctElevated)) +
+    geom_polygon(data = leadMap, mapping = aes(x = long, y = lat, group = id, fill = pctElevated)) +
     coord_map()
 ```
 
-Now you trying creating a plot of the `pctUnins` data - the percent uninsured - in the `insMap` data frame. We've started the code here, you just need to add in the `fill = variableName` in the appropriate place:
+### Health Insurance Data
+
+We can repeat the same process with the uninsurance data:
 
 ```{r}
+# load data from package into global environment
+unins <- stlInsurance
+
+# prepare for join
+unins %>%
+  rename(id = geoID) %>%
+  mutate(id = as.character(id)) -> unins
+
+# join tabular and geometric data
+insMap <- left_join(stlTract, unins, by = "id")
+
+# make an initial map
 ggplot() +
-    geom_polygon(data = insMap, mapping = aes(x = long, y = lat, group = id)) +
+    geom_polygon(data = insMap, mapping = aes(x = long, y = lat, group = id, fill = pctUnins)) +
     coord_map()
 ```
 
-### Fixing the Color Ramp
+## Fixing the Color Ramp
 The default color ramps that `R` presents are difficult to interpret. The `RColorBrewer` package you installed earlier provides us with a range of color ramps to select from. You can view these using the following function:
 
 ```{r}
@@ -142,24 +120,53 @@ ggplot() +
     coord_map()
 ```
 
-## Putting It All Together
+## Removing Some of the ggplot2 Elements
 
-At this point, we can combine both the data layer `geom` from the `leadMap` data with the `rivers` data to produce a serviceable map of lead poisoning rates in the City of St. Louis:
+To get the plot ready for presentation, we want to add a couple of details and remove some of the `ggplot` elements. The details we want to add are:
+
+* a title,
+* a subtitle,
+* and a clearer title for the legend. 
+
+We can add all of these using the `labs()` function, which accepts arguments for (among other things) `title`, `subtitle`, and `fill`. Note the commas after each argument, and the use of `\n` to add a line break in the title. We've also changed the color ramp to the `"Purples"` palette from `RColorBrewer`:
 
 ```{r}
 ggplot() +
     geom_polygon(data = leadMap, aes(x = long, y = lat, group = id, fill = pctElevated)) +
-    geom_polygon(data = rivers, mapping = aes(x = long, y = lat, group = id), fill = "#00009d", color = "#00009d") +
-    scale_fill_distiller(palette = "Greens", trans = "reverse") +
-    coord_map()
+    scale_fill_distiller(palette = "Purples", trans = "reverse") +
+    coord_map() +
+    labs(
+      title = "Percentage of Children Tested \nwith Blood Lead Levels >5µg/dL", 
+      subtitle = "St. Louis, Missouri",
+      fill = "% Elevated")
 ```
 
-Now, you try creating a similar map that combines the `rivers` data with the rates of un-insurance in the City of St. Louis:
+The gray background and the latitude and longitude information is not particularly informative here. We can remove it by adding the `theme_void()` function to our `ggplot()` call:
 
 ```{r}
+ggplot() +
+    geom_polygon(data = leadMap, aes(x = long, y = lat, group = id, fill = pctElevated)) +
+    scale_fill_distiller(palette = "Purples", trans = "reverse") +
+    coord_map() +
+    labs(
+      title = "Percentage of Children Tested \nwith Blood Lead Levels >5µg/dL", 
+      subtitle = "St. Louis, Missouri",
+      fill = "% Elevated") +
+    theme_void()
+```
 
+Try combining both of these alterations to the insurance data. We've given you some code to get started. The changes you should make:
 
+* Add a title describing what the map shows
+* Add a subtitle noting that the data are for St. Louis, Missouri
+* Add a better legend title
+* Remove the `ggplot2` theme elements
 
+```{r}
+ggplot() +
+    geom_polygon(data = insMap, aes(x = long, y = lat, group = id, fill = pctUnins)) +
+    scale_fill_distiller(palette = "Oranges", trans = "reverse") +
+    coord_map()
 ```
 
 ## Accessing Demographic Data
@@ -176,7 +183,7 @@ census_api_key("YOUR API KEY GOES HERE")
 
 You should only have to do this once per computer.
 
-### Viewing Possible Variables
+### Downloading data
 
 There are thousands of possible variables within the Census Bureau's products. We're going to pull a specific variable, the median household income, from the 2015 American Community Survey's (ACS) 5-year estimates for City of St. Louis census tracts. We need to specify the variable we want as well as the Census data product, its vintage, and the geographic parameters we are interested in:
 
@@ -196,9 +203,13 @@ incMap <- left_join(stlTract, medianInc, by = "id")
 
 ggplot() +
     geom_polygon(data = incMap, aes(x = long, y = lat, group = id, fill = estimate)) +
-    geom_polygon(data = rivers, mapping = aes(x = long, y = lat, group = id), fill = "#00009d", color = "#00009d") +
     scale_fill_distiller(palette = "BuPu", trans = "reverse") +
-    coord_map()
+    coord_map() +
+    labs(
+      title = "Median Income by Census Tract, 2011-2015", 
+      subtitle = "St. Louis, Missouri",
+      fill = "Median \nIncome") +
+    theme_void()
 ```
 
 Now, you try downloading the variable `"B01001B_001"` (number of African Americans) from the 2015 5-year ACS for City of St. Louis census tracts. We've got you started below:
@@ -212,8 +223,7 @@ With those data downloaded, follow the same process as we did in the previous ex
 
 1. rename `GEOID` to `id`, 
 2. use the `left_join()` function from `dplyr` to combine the median income data with our geometric data for St. Louis census tracts, 
-3. and then build a plot around those data layered with the river data;
-4. use the `"RdPu"` (Red Purple) color ramp for your data
+3. and then build a plot using the `"RdPu"` (Red Purple) color ramp for your data
 
 ```{r}
 

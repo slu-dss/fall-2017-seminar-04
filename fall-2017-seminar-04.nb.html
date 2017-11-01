@@ -181,125 +181,96 @@ $(document).ready(function () {
 <p>You will also need a number of other packages that we’ve worked with in the past sessions:</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBpbnN0YWxsIHVzaW5nIGluc3RhbGwucGFja2FnZXMoXCJ0aWR5dmVyc2VcIilcbmxpYnJhcnkoYnJvb20pICAgICAgICAgIyB0aWR5aW5nIGRhdGFcbmxpYnJhcnkoZHBseXIpICAgICAgICAgIyB3cmFuZ2xpbmcgZGF0YVxubGlicmFyeShnZ3Bsb3QyKSAgICAgICAjIHBsb3R0aW5nIGRhdGFcbiMgaW5zdGFsbCBpbmRpdmlkdWFsbHkgdXNpbmcgaW5zdGFsbC5wYWNrYWdlcygpXG5saWJyYXJ5KG1hcHByb2opICAgICAgICMgdG9vbHMgZm9yIHdvcmtpbmcgd2l0aCBtYXAgcHJvamVjdGlvbnNcbmxpYnJhcnkobWFwdG9vbHMpICAgICAgIyB0b29scyBmb3Igd29ya2luZyB3aXRoIHNwYXRpYWwgZGF0YVxuYGBgIn0= -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBpbnN0YWxsIHVzaW5nIGluc3RhbGwucGFja2FnZXMoXCJ0aWR5dmVyc2VcIilcbmxpYnJhcnkoYnJvb20pICAgICAgICAgIyB0aWR5aW5nIGRhdGFcbmxpYnJhcnkoZHBseXIpICAgICAgICAgIyB3cmFuZ2xpbmcgZGF0YVxubGlicmFyeShnZ3Bsb3QyKSAgICAgICAjIHBsb3R0aW5nIGRhdGFcblxuIyBpbnN0YWxsIGluZGl2aWR1YWxseSB1c2luZyBpbnN0YWxsLnBhY2thZ2VzKClcbmxpYnJhcnkobWFwcHJvaikgICAgICAgIyB0b29scyBmb3Igd29ya2luZyB3aXRoIG1hcCBwcm9qZWN0aW9uc1xubGlicmFyeShtYXB0b29scykgICAgICAjIHRvb2xzIGZvciB3b3JraW5nIHdpdGggc3BhdGlhbCBkYXRhXG5saWJyYXJ5KFJDb2xvckJyZXdlcikgICMgY29sb3IgcmFtcHNcbmxpYnJhcnkocmdkYWwpICAgICAgICAgIyB3b3JrIHdpdGggc2hhcGVmaWxlc1xubGlicmFyeSh0aWR5Y2Vuc3VzKSAgICAjIGFjY2Vzc2luZyBzcGF0aWFsIGRhdGFcblxuIyBpbnN0YWxsIHVzaW5nIHRoZSBkZXZ0b29scyBwYWNrYWdlXG4jIGRldnRvb2xzOjppbnN0YWxsX2dpdGh1YihcImNocmlzLXByZW5lci9zdGxEYXRhXCIpXG5saWJyYXJ5KHN0bERhdGEpICAgICAgICMgU3QuIExvdWlzIHNwYXRpYWwgZGF0YVxuYGBgIn0= -->
 <pre class="r"><code># install using install.packages(&quot;tidyverse&quot;)
 library(broom)         # tidying data
 library(dplyr)         # wrangling data
 library(ggplot2)       # plotting data
+
 # install individually using install.packages()
 library(mapproj)       # tools for working with map projections
-library(maptools)      # tools for working with spatial data</code></pre>
+library(maptools)      # tools for working with spatial data
+library(RColorBrewer)  # color ramps
+library(rgdal)         # work with shapefiles
+library(tidycensus)    # accessing spatial data
+
+# install using the devtools package
+# devtools::install_github(&quot;chris-prener/stlData&quot;)
+library(stlData)       # St. Louis spatial data</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiTG9hZGluZyByZXF1aXJlZCBwYWNrYWdlOiBzcFxuQ2hlY2tpbmcgcmdlb3MgYXZhaWxhYmlsaXR5OiBGQUxTRVxuIFx0Tm90ZTogd2hlbiByZ2VvcyBpcyBub3QgYXZhaWxhYmxlLCBwb2x5Z29uIGdlb21ldHJ5IFx0Y29tcHV0YXRpb25zIGluIG1hcHRvb2xzIGRlcGVuZCBvbiBncGNsaWIsXG4gXHR3aGljaCBoYXMgYSByZXN0cmljdGVkIGxpY2VuY2UuIEl0IGlzIGRpc2FibGVkIGJ5IGRlZmF1bHQ7XG4gXHR0byBlbmFibGUgZ3BjbGliLCB0eXBlIGdwY2xpYlBlcm1pdCgpXG4ifQ== -->
-<pre><code>Loading required package: sp
-Checking rgeos availability: FALSE
-    Note: when rgeos is not available, polygon geometry     computations in maptools depend on gpclib,
-    which has a restricted licence. It is disabled by default;
-    to enable gpclib, type gpclibPermit()</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShSQ29sb3JCcmV3ZXIpICAjIGNvbG9yIHJhbXBzXG5saWJyYXJ5KHJnZGFsKSAgICAgICAgICMgd29yayB3aXRoIHNoYXBlZmlsZXNcbmBgYCJ9 -->
-<pre class="r"><code>library(RColorBrewer)  # color ramps
-library(rgdal)         # work with shapefiles</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiRXJyb3IgaW4gbGlicmFyeShyZ2RhbCkgOiB0aGVyZSBpcyBubyBwYWNrYWdlIGNhbGxlZCDigJhyZ2RhbOKAmVxuIn0= -->
-<pre><code>Error in library(rgdal) : there is no package called ‘rgdal’</code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
 <div id="review---getting-back-to-where-we-left-off" class="section level2">
 <h2>Review - Getting Back to Where We Left Off</h2>
+<div id="reading-in-geometric-data" class="section level3">
+<h3>Reading in Geometric Data</h3>
 <p>We use the <code>rgdal</code> package to read shapefiles into <code>R</code>. These data must be in the <strong>top-level</strong> of your <code>R</code> project directory. To import one of our files, the <code>stlRivers</code> shapefile, we use the <code>readOGR()</code> function. We need to specify <code>dsn = &quot;.&quot;</code> for each use of the function, and the layer should match the name of your shapefile.</p>
 <p>Once imported, these data will appear under the “Values” section of the global environment as an object named <code>import</code>. However, they are not in a data frame structure. We need to use the <code>broom</code> package’s <code>tidy()</code> function to dis-aggregate these data and store them in a data frame. We’ll do this based on a common ID variable named <code>GEOID</code>:</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaW1wb3J0IDwtIHJlYWRPR1IoZHNuID0gXCIuXCIsIGxheWVyID0gXCJzdGxUcmFjdFwiKVxucml2ZXJzIDwtIHRpZHkoaW1wb3J0LCByZWdpb24gPSBcIkdFT0lEXCIpXG5gYGAifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaW1wb3J0IDwtIHJlYWRPR1IoZHNuID0gXCIuXCIsIGxheWVyID0gXCJzdGxUcmFjdFwiKVxuc3RsVHJhY3QgPC0gdGlkeShpbXBvcnQsIHJlZ2lvbiA9IFwiR0VPSURcIilcbmBgYCJ9 -->
 <pre class="r"><code>import &lt;- readOGR(dsn = &quot;.&quot;, layer = &quot;stlTract&quot;)
-rivers &lt;- tidy(import, region = &quot;GEOID&quot;)</code></pre>
+stlTract &lt;- tidy(import, region = &quot;GEOID&quot;)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>We also need to load our data on lead poisoning and</p>
 </div>
-<div id="plotting-data" class="section level2">
-<h2>Plotting Data</h2>
-<div id="merging-data" class="section level3">
-<h3>Merging Data</h3>
-<p>The first step towards plotting our down data is to load some tabular data that we want to map, and quickly explore it using the <code>str()</code> function. We are looking for a unique identification number for each row in the tabular data.</p>
+<div id="lead-poisoning-data" class="section level3">
+<h3>Lead Poisoning Data</h3>
+<p>We also need to load our data on lead poisoning and prepare it to be joined with the shapefile data:</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGVhZCA8LSBzdGxMZWFkXG5zdHIoc3RsTGVhZClcbmBgYCJ9 -->
-<pre class="r"><code>lead &lt;- stlLead
-str(stlLead)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Note how <code>geoID</code> is a numeric variable. In order to map these data, we have to make two fundamental changes. The first is to rename <code>geoID</code> to <code>id</code> so that it matches the name of the similar variable in our <code>stlTract</code> data frame. The second change is to convert <code>geoID</code> from numeric to string. We identified both the name change to <code>id</code> and the fact that <code>id</code> is a character variable when we explored the newly created <code>stlTract</code> data above.</p>
-<p>To rename variables, we can use the <code>dplyr</code> package’s <code>rename()</code> function. To re-code variables, we can use the <code>dplyr</code> package’s <code>mutate()</code> function.</p>
-<p>To make these changes, we are going to use a pipe (<code>%&gt;%</code>). Pipes make our code more readable - they can be read in paragraph or list-like form:</p>
-<ol style="list-style-type: decimal">
-<li>We will take our <code>lead</code> data, <em>then</em>…</li>
-<li>We will rename the variable <code>geoID</code> to <code>id</code> in those <code>lead</code> data, <em>then</em>…</li>
-<li>We will recede <code>id</code> to character, and assign those changes onto the <code>id</code> variable (as opposed to making a new variable), <em>then</em>…</li>
-<li>We will assign all of these changes back onto the <code>lead</code> data frame (as opposed to making a new data frame object).</li>
-</ol>
-<p>Each time we say the word “then”, we use a pipe (<code>%&gt;%</code>) operator.</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGVhZCAlPiVcbiAgcmVuYW1lKGlkID0gZ2VvSUQpICU+JVxuICBtdXRhdGUoaWQgPSBhcy5jaGFyYWN0ZXIoaWQpKSAtPiBsZWFkXG5gYGAifQ== -->
-<pre class="r"><code>lead %&gt;%
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBsb2FkIGRhdGEgZnJvbSBwYWNrYWdlIGludG8gZ2xvYmFsIGVudmlyb25tZW50XG5sZWFkIDwtIHN0bExlYWRcbiMgcHJlcGFyZSBmb3Igam9pblxubGVhZCAlPiVcbiAgcmVuYW1lKGlkID0gZ2VvSUQpICU+JVxuICBtdXRhdGUoaWQgPSBhcy5jaGFyYWN0ZXIoaWQpKSAtPiBsZWFkXG5sZWFkTWFwIDwtIGxlZnRfam9pbihzdGxUcmFjdCwgbGVhZCwgYnkgPSBcImlkXCIpXG5gYGAifQ== -->
+<pre class="r"><code># load data from package into global environment
+lead &lt;- stlLead
+# prepare for join
+lead %&gt;%
   rename(id = geoID) %&gt;%
-  mutate(id = as.character(id)) -&gt; lead</code></pre>
+  mutate(id = as.character(id)) -&gt; lead
+leadMap &lt;- left_join(stlTract, lead, by = &quot;id&quot;)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>With these changes complete, we want to combine the <code>stlTract</code> data with the <code>lead</code> data. We’ll use the variable that is now named and formatted identically in both data frames - <code>id</code>. The <code>left_join()</code> function from <code>dplyr</code> will take the <code>stlTract</code> data and add the <code>lead</code> variables to <code>stlTract</code>’s right side, assigning the <code>stlTract</code> vertices the data from the matching census tract in the <code>lead</code> data. We combine these two data frames into a new data frame named <code>leadMap</code>:</p>
+<p>Once the join is complete, we can use <code>ggplot2</code> to map our data:</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGVhZE1hcCA8LSBsZWZ0X2pvaW4oc3RsVHJhY3QsIGxlYWQsIGJ5ID0gXCJpZFwiKVxuYGBgIn0= -->
-<pre class="r"><code>leadMap &lt;- left_join(stlTract, lead, by = &quot;id&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Now, you try replicating the three previous code blocks by:</p>
-<ol style="list-style-type: decimal">
-<li>loading the <code>stlInsurance</code> data stored in the <code>stlData</code> package to a data frame named <code>insurance</code></li>
-<li>renaming <code>geoID</code> to <code>id</code></li>
-<li>re-coding <code>id</code> from numeric to string using <code>mutate()</code></li>
-<li>assigning these changes to the <code>insurance</code> data frame</li>
-<li>using the <code>left_join()</code> function to combine the <code>stlTract</code> data with the <code>insurance</code> data into a new data frame named <code>insMap</code>:</li>
-</ol>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-</div>
-<div id="plotting-quantities" class="section level3">
-<h3>Plotting Quantities</h3>
-<p>With our data now joined, we are ready to map them! First, we’ll use the <code>leadMap</code> data frame to map the percentage of elevated blood lead level tests per census tract. These data are stored in the <code>pctElevated</code> variable. We use the <code>fill</code> option within the aesthetic mapping to accomplish this. It is the <em>only</em> change from our previous map, other than switching the data source.</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ2dwbG90KCkgK1xuICAgIGdlb21fcG9seWdvbihkYXRhID0gbGVhZE1hcCwgbWFwcGluZyA9IGFlcyh4ID0gbG9uZywgeSA9IGxhdCwgZ3JvdXAgPSBpZCwgXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGZpbGwgPSBwY3RFbGV2YXRlZCkpICtcbiAgICBjb29yZF9tYXAoKVxuYGBgIn0= -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ2dwbG90KCkgK1xuICAgIGdlb21fcG9seWdvbihkYXRhID0gbGVhZE1hcCwgbWFwcGluZyA9IGFlcyh4ID0gbG9uZywgeSA9IGxhdCwgZ3JvdXAgPSBpZCwgZmlsbCA9IHBjdEVsZXZhdGVkKSkgK1xuICAgIGNvb3JkX21hcCgpXG5gYGAifQ== -->
 <pre class="r"><code>ggplot() +
-    geom_polygon(data = leadMap, mapping = aes(x = long, y = lat, group = id, 
-                                               fill = pctElevated)) +
-    coord_map()</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Now you trying creating a plot of the <code>pctUnins</code> data - the percent uninsured - in the <code>insMap</code> data frame. We’ve started the code here, you just need to add in the <code>fill = variableName</code> in the appropriate place:</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ2dwbG90KCkgK1xuICAgIGdlb21fcG9seWdvbihkYXRhID0gaW5zTWFwLCBtYXBwaW5nID0gYWVzKHggPSBsb25nLCB5ID0gbGF0LCBncm91cCA9IGlkKSkgK1xuICAgIGNvb3JkX21hcCgpXG5gYGAifQ== -->
-<pre class="r"><code>ggplot() +
-    geom_polygon(data = insMap, mapping = aes(x = long, y = lat, group = id)) +
+    geom_polygon(data = leadMap, mapping = aes(x = long, y = lat, group = id, fill = pctElevated)) +
     coord_map()</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
-<div id="fixing-the-color-ramp" class="section level3">
-<h3>Fixing the Color Ramp</h3>
+<div id="health-insurance-data" class="section level3">
+<h3>Health Insurance Data</h3>
+<p>We can repeat the same process with the uninsurance data:</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBsb2FkIGRhdGEgZnJvbSBwYWNrYWdlIGludG8gZ2xvYmFsIGVudmlyb25tZW50XG51bmlucyA8LSBzdGxJbnN1cmFuY2VcblxuIyBwcmVwYXJlIGZvciBqb2luXG51bmlucyAlPiVcbiAgcmVuYW1lKGlkID0gZ2VvSUQpICU+JVxuICBtdXRhdGUoaWQgPSBhcy5jaGFyYWN0ZXIoaWQpKSAtPiB1bmluc1xuXG4jIGpvaW4gdGFidWxhciBhbmQgZ2VvbWV0cmljIGRhdGFcbmluc01hcCA8LSBsZWZ0X2pvaW4oc3RsVHJhY3QsIHVuaW5zLCBieSA9IFwiaWRcIilcblxuIyBtYWtlIGFuIGluaXRpYWwgbWFwXG5nZ3Bsb3QoKSArXG4gICAgZ2VvbV9wb2x5Z29uKGRhdGEgPSBpbnNNYXAsIG1hcHBpbmcgPSBhZXMoeCA9IGxvbmcsIHkgPSBsYXQsIGdyb3VwID0gaWQsIGZpbGwgPSBwY3RVbmlucykpICtcbiAgICBjb29yZF9tYXAoKVxuYGBgIn0= -->
+<pre class="r"><code># load data from package into global environment
+unins &lt;- stlInsurance
+
+# prepare for join
+unins %&gt;%
+  rename(id = geoID) %&gt;%
+  mutate(id = as.character(id)) -&gt; unins
+
+# join tabular and geometric data
+insMap &lt;- left_join(stlTract, unins, by = &quot;id&quot;)
+
+# make an initial map
+ggplot() +
+    geom_polygon(data = insMap, mapping = aes(x = long, y = lat, group = id, fill = pctUnins)) +
+    coord_map()</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+</div>
+<div id="fixing-the-color-ramp" class="section level2">
+<h2>Fixing the Color Ramp</h2>
 <p>The default color ramps that <code>R</code> presents are difficult to interpret. The <code>RColorBrewer</code> package you installed earlier provides us with a range of color ramps to select from. You can view these using the following function:</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
@@ -341,24 +312,60 @@ str(stlLead)</code></pre>
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
-</div>
-<div id="putting-it-all-together" class="section level2">
-<h2>Putting It All Together</h2>
-<p>At this point, we can combine both the data layer <code>geom</code> from the <code>leadMap</code> data with the <code>rivers</code> data to produce a serviceable map of lead poisoning rates in the City of St. Louis:</p>
+<div id="removing-some-of-the-ggplot2-elements" class="section level2">
+<h2>Removing Some of the ggplot2 Elements</h2>
+<p>To get the plot ready for presentation, we want to add a couple of details and remove some of the <code>ggplot</code> elements. The details we want to add are:</p>
+<ul>
+<li>a title,</li>
+<li>a subtitle,</li>
+<li>and a clearer title for the legend.</li>
+</ul>
+<p>We can add all of these using the <code>labs()</code> function, which accepts arguments for (among other things) <code>title</code>, <code>subtitle</code>, and <code>fill</code>. Note the commas after each argument, and the use of <code>\n</code> to add a line break in the title. We’ve also changed the color ramp to the <code>&quot;Purples&quot;</code> palette from <code>RColorBrewer</code>:</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ2dwbG90KCkgK1xuICAgIGdlb21fcG9seWdvbihkYXRhID0gbGVhZE1hcCwgYWVzKHggPSBsb25nLCB5ID0gbGF0LCBncm91cCA9IGlkLCBmaWxsID0gcGN0RWxldmF0ZWQpKSArXG4gICAgZ2VvbV9wb2x5Z29uKGRhdGEgPSByaXZlcnMsIG1hcHBpbmcgPSBhZXMoeCA9IGxvbmcsIHkgPSBsYXQsIGdyb3VwID0gaWQpLCBmaWxsID0gXCIjMDAwMDlkXCIsIGNvbG9yID0gXCIjMDAwMDlkXCIpICtcbiAgICBzY2FsZV9maWxsX2Rpc3RpbGxlcihwYWxldHRlID0gXCJHcmVlbnNcIiwgdHJhbnMgPSBcInJldmVyc2VcIikgK1xuICAgIGNvb3JkX21hcCgpXG5gYGAifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ2dwbG90KCkgK1xuICAgIGdlb21fcG9seWdvbihkYXRhID0gbGVhZE1hcCwgYWVzKHggPSBsb25nLCB5ID0gbGF0LCBncm91cCA9IGlkLCBmaWxsID0gcGN0RWxldmF0ZWQpKSArXG4gICAgc2NhbGVfZmlsbF9kaXN0aWxsZXIocGFsZXR0ZSA9IFwiUHVycGxlc1wiLCB0cmFucyA9IFwicmV2ZXJzZVwiKSArXG4gICAgY29vcmRfbWFwKCkgK1xuICAgIGxhYnMoXG4gICAgICB0aXRsZSA9IFwiUGVyY2VudGFnZSBvZiBDaGlsZHJlbiBUZXN0ZWQgXFxud2l0aCBCbG9vZCBMZWFkIExldmVscyA+NcK1Zy9kTFwiLCBcbiAgICAgIHN1YnRpdGxlID0gXCJTdC4gTG91aXMsIE1pc3NvdXJpXCIsXG4gICAgICBmaWxsID0gXCIlIEVsZXZhdGVkXCIpXG5gYGAifQ== -->
 <pre class="r"><code>ggplot() +
     geom_polygon(data = leadMap, aes(x = long, y = lat, group = id, fill = pctElevated)) +
-    geom_polygon(data = rivers, mapping = aes(x = long, y = lat, group = id), fill = &quot;#00009d&quot;, color = &quot;#00009d&quot;) +
-    scale_fill_distiller(palette = &quot;Greens&quot;, trans = &quot;reverse&quot;) +
-    coord_map()</code></pre>
+    scale_fill_distiller(palette = &quot;Purples&quot;, trans = &quot;reverse&quot;) +
+    coord_map() +
+    labs(
+      title = &quot;Percentage of Children Tested \nwith Blood Lead Levels &gt;5µg/dL&quot;, 
+      subtitle = &quot;St. Louis, Missouri&quot;,
+      fill = &quot;% Elevated&quot;)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Now, you try creating a similar map that combines the <code>rivers</code> data with the rates of un-insurance in the City of St. Louis:</p>
+<p>The gray background and the latitude and longitude information is not particularly informative here. We can remove it by adding the <code>theme_void()</code> function to our <code>ggplot()</code> call:</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ2dwbG90KCkgK1xuICAgIGdlb21fcG9seWdvbihkYXRhID0gbGVhZE1hcCwgYWVzKHggPSBsb25nLCB5ID0gbGF0LCBncm91cCA9IGlkLCBmaWxsID0gcGN0RWxldmF0ZWQpKSArXG4gICAgc2NhbGVfZmlsbF9kaXN0aWxsZXIocGFsZXR0ZSA9IFwiUHVycGxlc1wiLCB0cmFucyA9IFwicmV2ZXJzZVwiKSArXG4gICAgY29vcmRfbWFwKCkgK1xuICAgIGxhYnMoXG4gICAgICB0aXRsZSA9IFwiUGVyY2VudGFnZSBvZiBDaGlsZHJlbiBUZXN0ZWQgXFxud2l0aCBCbG9vZCBMZWFkIExldmVscyA+NcK1Zy9kTFwiLCBcbiAgICAgIHN1YnRpdGxlID0gXCJTdC4gTG91aXMsIE1pc3NvdXJpXCIsXG4gICAgICBmaWxsID0gXCIlIEVsZXZhdGVkXCIpICtcbiAgICB0aGVtZV92b2lkKClcbmBgYCJ9 -->
+<pre class="r"><code>ggplot() +
+    geom_polygon(data = leadMap, aes(x = long, y = lat, group = id, fill = pctElevated)) +
+    scale_fill_distiller(palette = &quot;Purples&quot;, trans = &quot;reverse&quot;) +
+    coord_map() +
+    labs(
+      title = &quot;Percentage of Children Tested \nwith Blood Lead Levels &gt;5µg/dL&quot;, 
+      subtitle = &quot;St. Louis, Missouri&quot;,
+      fill = &quot;% Elevated&quot;) +
+    theme_void()</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Try combining both of these alterations to the insurance data. We’ve given you some code to get started. The changes you should make:</p>
+<ul>
+<li>Add a title describing what the map shows</li>
+<li>Add a subtitle noting that the data are for St. Louis, Missouri</li>
+<li>Add a better legend title</li>
+<li>Remove the <code>ggplot2</code> theme elements</li>
+</ul>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ2dwbG90KCkgK1xuICAgIGdlb21fcG9seWdvbihkYXRhID0gaW5zTWFwLCBhZXMoeCA9IGxvbmcsIHkgPSBsYXQsIGdyb3VwID0gaWQsIGZpbGwgPSBwY3RVbmlucykpICtcbiAgICBzY2FsZV9maWxsX2Rpc3RpbGxlcihwYWxldHRlID0gXCJPcmFuZ2VzXCIsIHRyYW5zID0gXCJyZXZlcnNlXCIpICtcbiAgICBjb29yZF9tYXAoKVxuYGBgIn0= -->
+<pre class="r"><code>ggplot() +
+    geom_polygon(data = insMap, aes(x = long, y = lat, group = id, fill = pctUnins)) +
+    scale_fill_distiller(palette = &quot;Oranges&quot;, trans = &quot;reverse&quot;) +
+    coord_map()</code></pre>
+<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -377,8 +384,8 @@ str(stlLead)</code></pre>
 <!-- rnb-text-begin -->
 <p>You should only have to do this once per computer.</p>
 </div>
-<div id="viewing-possible-variables" class="section level3">
-<h3>Viewing Possible Variables</h3>
+<div id="downloading-data" class="section level3">
+<h3>Downloading data</h3>
 <p>There are thousands of possible variables within the Census Bureau’s products. We’re going to pull a specific variable, the median household income, from the 2015 American Community Survey’s (ACS) 5-year estimates for City of St. Louis census tracts. We need to specify the variable we want as well as the Census data product, its vintage, and the geographic parameters we are interested in:</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
@@ -392,16 +399,20 @@ str(stlLead)</code></pre>
 <p>With those data downloaded, we can follow a similar process as we did before for mapping these data. We’ll rename <code>GEOID</code> to <code>id</code>, use the <code>left_join()</code> function from <code>dplyr</code> to combine the median income data with our geometric data for St. Louis census tracts, and then build a plot around those data layered with the river data. We’ve selected a different <code>RColorBrewer</code> ramp here - <code>&quot;BuPu&quot;</code> (Blue and Purple).</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubWVkaWFuSW5jIDwtIHJlbmFtZShtZWRpYW5JbmMsIGlkID0gR0VPSUQpXG5cbmluY01hcCA8LSBsZWZ0X2pvaW4oc3RsVHJhY3QsIG1lZGlhbkluYywgYnkgPSBcImlkXCIpXG5cbmdncGxvdCgpICtcbiAgICBnZW9tX3BvbHlnb24oZGF0YSA9IGluY01hcCwgYWVzKHggPSBsb25nLCB5ID0gbGF0LCBncm91cCA9IGlkLCBmaWxsID0gZXN0aW1hdGUpKSArXG4gICAgZ2VvbV9wb2x5Z29uKGRhdGEgPSByaXZlcnMsIG1hcHBpbmcgPSBhZXMoeCA9IGxvbmcsIHkgPSBsYXQsIGdyb3VwID0gaWQpLCBmaWxsID0gXCIjMDAwMDlkXCIsIGNvbG9yID0gXCIjMDAwMDlkXCIpICtcbiAgICBzY2FsZV9maWxsX2Rpc3RpbGxlcihwYWxldHRlID0gXCJCdVB1XCIsIHRyYW5zID0gXCJyZXZlcnNlXCIpICtcbiAgICBjb29yZF9tYXAoKVxuYGBgIn0= -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubWVkaWFuSW5jIDwtIHJlbmFtZShtZWRpYW5JbmMsIGlkID0gR0VPSUQpXG5cbmluY01hcCA8LSBsZWZ0X2pvaW4oc3RsVHJhY3QsIG1lZGlhbkluYywgYnkgPSBcImlkXCIpXG5cbmdncGxvdCgpICtcbiAgICBnZW9tX3BvbHlnb24oZGF0YSA9IGluY01hcCwgYWVzKHggPSBsb25nLCB5ID0gbGF0LCBncm91cCA9IGlkLCBmaWxsID0gZXN0aW1hdGUpKSArXG4gICAgc2NhbGVfZmlsbF9kaXN0aWxsZXIocGFsZXR0ZSA9IFwiQnVQdVwiLCB0cmFucyA9IFwicmV2ZXJzZVwiKSArXG4gICAgY29vcmRfbWFwKCkgK1xuICAgIGxhYnMoXG4gICAgICB0aXRsZSA9IFwiTWVkaWFuIEluY29tZSBieSBDZW5zdXMgVHJhY3QsIDIwMTEtMjAxNVwiLCBcbiAgICAgIHN1YnRpdGxlID0gXCJTdC4gTG91aXMsIE1pc3NvdXJpXCIsXG4gICAgICBmaWxsID0gXCJNZWRpYW4gXFxuSW5jb21lXCIpICtcbiAgICB0aGVtZV92b2lkKClcbmBgYCJ9 -->
 <pre class="r"><code>medianInc &lt;- rename(medianInc, id = GEOID)
 
 incMap &lt;- left_join(stlTract, medianInc, by = &quot;id&quot;)
 
 ggplot() +
     geom_polygon(data = incMap, aes(x = long, y = lat, group = id, fill = estimate)) +
-    geom_polygon(data = rivers, mapping = aes(x = long, y = lat, group = id), fill = &quot;#00009d&quot;, color = &quot;#00009d&quot;) +
     scale_fill_distiller(palette = &quot;BuPu&quot;, trans = &quot;reverse&quot;) +
-    coord_map()</code></pre>
+    coord_map() +
+    labs(
+      title = &quot;Median Income by Census Tract, 2011-2015&quot;, 
+      subtitle = &quot;St. Louis, Missouri&quot;,
+      fill = &quot;Median \nIncome&quot;) +
+    theme_void()</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -418,8 +429,7 @@ ggplot() +
 <ol style="list-style-type: decimal">
 <li>rename <code>GEOID</code> to <code>id</code>,</li>
 <li>use the <code>left_join()</code> function from <code>dplyr</code> to combine the median income data with our geometric data for St. Louis census tracts,</li>
-<li>and then build a plot around those data layered with the river data;</li>
-<li>use the <code>&quot;RdPu&quot;</code> (Red Purple) color ramp for your data</li>
+<li>and then build a plot using the <code>&quot;RdPu&quot;</code> (Red Purple) color ramp for your data</li>
 </ol>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
@@ -427,7 +437,7 @@ ggplot() +
 </div>
 </div>
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiRFNTIEZhbGwgMjAxNyBTZW1pbmFyIDQiCm91dHB1dDogaHRtbF9ub3RlYm9vawphdXRob3JzOiBDaHJpcyAmIENocmlzdHkKLS0tCgojIyBJbnRyb2R1Y3Rpb24KVGhpcyBpcyB0aGUgbm90ZWJvb2sgZm9yIHRoZSBmaW5hbCBgUmAgc2VtaW5hciBzZXNzaW9uIGZvciBGYWxsIDIwMTcuCgojIyBEZXBlbmRlbmNpZXMKCllvdSB3aWxsIGFsc28gbmVlZCBhIG51bWJlciBvZiBvdGhlciBwYWNrYWdlcyB0aGF0IHdlJ3ZlIHdvcmtlZCB3aXRoIGluIHRoZSBwYXN0IHNlc3Npb25zOgoKYGBge3J9CiMgaW5zdGFsbCB1c2luZyBpbnN0YWxsLnBhY2thZ2VzKCJ0aWR5dmVyc2UiKQpsaWJyYXJ5KGJyb29tKSAgICAgICAgICMgdGlkeWluZyBkYXRhCmxpYnJhcnkoZHBseXIpICAgICAgICAgIyB3cmFuZ2xpbmcgZGF0YQpsaWJyYXJ5KGdncGxvdDIpICAgICAgICMgcGxvdHRpbmcgZGF0YQoKIyBpbnN0YWxsIGluZGl2aWR1YWxseSB1c2luZyBpbnN0YWxsLnBhY2thZ2VzKCkKbGlicmFyeShtYXBwcm9qKSAgICAgICAjIHRvb2xzIGZvciB3b3JraW5nIHdpdGggbWFwIHByb2plY3Rpb25zCmxpYnJhcnkobWFwdG9vbHMpICAgICAgIyB0b29scyBmb3Igd29ya2luZyB3aXRoIHNwYXRpYWwgZGF0YQpsaWJyYXJ5KFJDb2xvckJyZXdlcikgICMgY29sb3IgcmFtcHMKbGlicmFyeShyZ2RhbCkgICAgICAgICAjIHdvcmsgd2l0aCBzaGFwZWZpbGVzCmxpYnJhcnkodGlkeWNlbnN1cykgICAgIyBhY2Nlc3Npbmcgc3BhdGlhbCBkYXRhCgojIGluc3RhbGwgdXNpbmcgdGhlIGRldnRvb2xzIHBhY2thZ2UKIyBkZXZ0b29sczo6aW5zdGFsbF9naXRodWIoImNocmlzLXByZW5lci9zdGxEYXRhIikKbGlicmFyeShzdGxEYXRhKSAgICAgICAjIFN0LiBMb3VpcyBzcGF0aWFsIGRhdGEKYGBgCgojIyBSZXZpZXcgLSBHZXR0aW5nIEJhY2sgdG8gV2hlcmUgV2UgTGVmdCBPZmYKV2UgdXNlIHRoZSBgcmdkYWxgIHBhY2thZ2UgdG8gcmVhZCBzaGFwZWZpbGVzIGludG8gYFJgLiBUaGVzZSBkYXRhIG11c3QgYmUgaW4gdGhlICoqdG9wLWxldmVsKiogb2YgeW91ciBgUmAgcHJvamVjdCBkaXJlY3RvcnkuIFRvIGltcG9ydCBvbmUgb2Ygb3VyIGZpbGVzLCB0aGUgYHN0bFJpdmVyc2Agc2hhcGVmaWxlLCB3ZSB1c2UgdGhlIGByZWFkT0dSKClgIGZ1bmN0aW9uLiBXZSBuZWVkIHRvIHNwZWNpZnkgYGRzbiA9ICIuImAgZm9yIGVhY2ggdXNlIG9mIHRoZSBmdW5jdGlvbiwgYW5kIHRoZSBsYXllciBzaG91bGQgbWF0Y2ggdGhlIG5hbWUgb2YgeW91ciBzaGFwZWZpbGUuCgpPbmNlIGltcG9ydGVkLCB0aGVzZSBkYXRhIHdpbGwgYXBwZWFyIHVuZGVyIHRoZSAiVmFsdWVzIiBzZWN0aW9uIG9mIHRoZSBnbG9iYWwgZW52aXJvbm1lbnQgYXMgYW4gb2JqZWN0IG5hbWVkIGBpbXBvcnRgLiBIb3dldmVyLCB0aGV5IGFyZSBub3QgaW4gYSBkYXRhIGZyYW1lIHN0cnVjdHVyZS4gV2UgbmVlZCB0byB1c2UgdGhlIGBicm9vbWAgcGFja2FnZSdzIGB0aWR5KClgIGZ1bmN0aW9uIHRvIGRpcy1hZ2dyZWdhdGUgdGhlc2UgZGF0YSBhbmQgc3RvcmUgdGhlbSBpbiBhIGRhdGEgZnJhbWUuIFdlJ2xsIGRvIHRoaXMgYmFzZWQgb24gYSBjb21tb24gSUQgdmFyaWFibGUgbmFtZWQgYEdFT0lEYDoKCmBgYHtyfQppbXBvcnQgPC0gcmVhZE9HUihkc24gPSAiLiIsIGxheWVyID0gInN0bFRyYWN0IikKcml2ZXJzIDwtIHRpZHkoaW1wb3J0LCByZWdpb24gPSAiR0VPSUQiKQpgYGAKCldlIGFsc28gbmVlZCB0byBsb2FkIG91ciBkYXRhIG9uIGxlYWQgcG9pc29uaW5nIGFuZCAKCgojIyBQbG90dGluZyBEYXRhCiMjIyBNZXJnaW5nIERhdGEKVGhlIGZpcnN0IHN0ZXAgdG93YXJkcyBwbG90dGluZyBvdXIgZG93biBkYXRhIGlzIHRvIGxvYWQgc29tZSB0YWJ1bGFyIGRhdGEgdGhhdCB3ZSB3YW50IHRvIG1hcCwgYW5kIHF1aWNrbHkgZXhwbG9yZSBpdCB1c2luZyB0aGUgYHN0cigpYCBmdW5jdGlvbi4gV2UgYXJlIGxvb2tpbmcgZm9yIGEgdW5pcXVlIGlkZW50aWZpY2F0aW9uIG51bWJlciBmb3IgZWFjaCByb3cgaW4gdGhlIHRhYnVsYXIgZGF0YS4KCmBgYHtyfQpsZWFkIDwtIHN0bExlYWQKc3RyKHN0bExlYWQpCmBgYAoKTm90ZSBob3cgYGdlb0lEYCBpcyBhIG51bWVyaWMgdmFyaWFibGUuIEluIG9yZGVyIHRvIG1hcCB0aGVzZSBkYXRhLCB3ZSBoYXZlIHRvIG1ha2UgdHdvIGZ1bmRhbWVudGFsIGNoYW5nZXMuIFRoZSBmaXJzdCBpcyB0byByZW5hbWUgYGdlb0lEYCB0byBgaWRgIHNvIHRoYXQgaXQgbWF0Y2hlcyB0aGUgbmFtZSBvZiB0aGUgc2ltaWxhciB2YXJpYWJsZSBpbiBvdXIgYHN0bFRyYWN0YCBkYXRhIGZyYW1lLiBUaGUgc2Vjb25kIGNoYW5nZSBpcyB0byBjb252ZXJ0IGBnZW9JRGAgZnJvbSBudW1lcmljIHRvIHN0cmluZy4gV2UgaWRlbnRpZmllZCBib3RoIHRoZSBuYW1lIGNoYW5nZSB0byBgaWRgIGFuZCB0aGUgZmFjdCB0aGF0IGBpZGAgaXMgYSBjaGFyYWN0ZXIgdmFyaWFibGUgd2hlbiB3ZSBleHBsb3JlZCB0aGUgbmV3bHkgY3JlYXRlZCBgc3RsVHJhY3RgIGRhdGEgYWJvdmUuCgpUbyByZW5hbWUgdmFyaWFibGVzLCB3ZSBjYW4gdXNlIHRoZSBgZHBseXJgIHBhY2thZ2UncyBgcmVuYW1lKClgIGZ1bmN0aW9uLiBUbyByZS1jb2RlIHZhcmlhYmxlcywgd2UgY2FuIHVzZSB0aGUgYGRwbHlyYCBwYWNrYWdlJ3MgYG11dGF0ZSgpYCBmdW5jdGlvbi4KClRvIG1ha2UgdGhlc2UgY2hhbmdlcywgd2UgYXJlIGdvaW5nIHRvIHVzZSBhIHBpcGUgKGAlPiVgKS4gUGlwZXMgbWFrZSBvdXIgY29kZSBtb3JlIHJlYWRhYmxlIC0gdGhleSBjYW4gYmUgcmVhZCBpbiBwYXJhZ3JhcGggb3IgbGlzdC1saWtlIGZvcm06CgoxLiBXZSB3aWxsIHRha2Ugb3VyIGBsZWFkYCBkYXRhLCAqdGhlbiouLi4KMi4gV2Ugd2lsbCByZW5hbWUgdGhlIHZhcmlhYmxlIGBnZW9JRGAgdG8gYGlkYCBpbiB0aG9zZSBgbGVhZGAgZGF0YSwgKnRoZW4qLi4uCjMuIFdlIHdpbGwgcmVjZWRlIGBpZGAgdG8gY2hhcmFjdGVyLCBhbmQgYXNzaWduIHRob3NlIGNoYW5nZXMgb250byB0aGUgYGlkYCB2YXJpYWJsZSAoYXMgb3Bwb3NlZCB0byBtYWtpbmcgYSBuZXcgdmFyaWFibGUpLCAqdGhlbiouLi4KNC4gV2Ugd2lsbCBhc3NpZ24gYWxsIG9mIHRoZXNlIGNoYW5nZXMgYmFjayBvbnRvIHRoZSBgbGVhZGAgZGF0YSBmcmFtZSAoYXMgb3Bwb3NlZCB0byBtYWtpbmcgYSBuZXcgZGF0YSBmcmFtZSBvYmplY3QpLgoKRWFjaCB0aW1lIHdlIHNheSB0aGUgd29yZCAidGhlbiIsIHdlIHVzZSBhIHBpcGUgKGAlPiVgKSBvcGVyYXRvci4KCmBgYHtyfQpsZWFkICU+JQogIHJlbmFtZShpZCA9IGdlb0lEKSAlPiUKICBtdXRhdGUoaWQgPSBhcy5jaGFyYWN0ZXIoaWQpKSAtPiBsZWFkCmBgYAoKV2l0aCB0aGVzZSBjaGFuZ2VzIGNvbXBsZXRlLCB3ZSB3YW50IHRvIGNvbWJpbmUgdGhlIGBzdGxUcmFjdGAgZGF0YSB3aXRoIHRoZSBgbGVhZGAgZGF0YS4gV2UnbGwgdXNlIHRoZSB2YXJpYWJsZSB0aGF0IGlzIG5vdyBuYW1lZCBhbmQgZm9ybWF0dGVkIGlkZW50aWNhbGx5IGluIGJvdGggZGF0YSBmcmFtZXMgLSBgaWRgLiBUaGUgYGxlZnRfam9pbigpYCBmdW5jdGlvbiBmcm9tIGBkcGx5cmAgd2lsbCB0YWtlIHRoZSBgc3RsVHJhY3RgIGRhdGEgYW5kIGFkZCB0aGUgYGxlYWRgIHZhcmlhYmxlcyB0byBgc3RsVHJhY3RgJ3MgcmlnaHQgc2lkZSwgYXNzaWduaW5nIHRoZSBgc3RsVHJhY3RgIHZlcnRpY2VzIHRoZSBkYXRhIGZyb20gdGhlIG1hdGNoaW5nIGNlbnN1cyB0cmFjdCBpbiB0aGUgYGxlYWRgIGRhdGEuIFdlIGNvbWJpbmUgdGhlc2UgdHdvIGRhdGEgZnJhbWVzIGludG8gYSBuZXcgZGF0YSBmcmFtZSBuYW1lZCBgbGVhZE1hcGA6CgpgYGB7cn0KbGVhZE1hcCA8LSBsZWZ0X2pvaW4oc3RsVHJhY3QsIGxlYWQsIGJ5ID0gImlkIikKYGBgCgpOb3csIHlvdSB0cnkgcmVwbGljYXRpbmcgdGhlIHRocmVlIHByZXZpb3VzIGNvZGUgYmxvY2tzIGJ5OgoKMS4gbG9hZGluZyB0aGUgYHN0bEluc3VyYW5jZWAgZGF0YSBzdG9yZWQgaW4gdGhlIGBzdGxEYXRhYCBwYWNrYWdlIHRvIGEgZGF0YSBmcmFtZSBuYW1lZCBgaW5zdXJhbmNlYAoyLiByZW5hbWluZyBgZ2VvSURgIHRvIGBpZGAKMy4gcmUtY29kaW5nIGBpZGAgZnJvbSBudW1lcmljIHRvIHN0cmluZyB1c2luZyBgbXV0YXRlKClgCjQuIGFzc2lnbmluZyB0aGVzZSBjaGFuZ2VzIHRvIHRoZSBgaW5zdXJhbmNlYCBkYXRhIGZyYW1lCjUuIHVzaW5nIHRoZSBgbGVmdF9qb2luKClgIGZ1bmN0aW9uIHRvIGNvbWJpbmUgdGhlIGBzdGxUcmFjdGAgZGF0YSB3aXRoIHRoZSBgaW5zdXJhbmNlYCBkYXRhIGludG8gYSBuZXcgZGF0YSBmcmFtZSBuYW1lZCBgaW5zTWFwYDoKCmBgYHtyfQoKCgoKYGBgCgojIyMgUGxvdHRpbmcgUXVhbnRpdGllcwpXaXRoIG91ciBkYXRhIG5vdyBqb2luZWQsIHdlIGFyZSByZWFkeSB0byBtYXAgdGhlbSEgRmlyc3QsIHdlJ2xsIHVzZSB0aGUgYGxlYWRNYXBgIGRhdGEgZnJhbWUgdG8gbWFwIHRoZSBwZXJjZW50YWdlIG9mIGVsZXZhdGVkIGJsb29kIGxlYWQgbGV2ZWwgdGVzdHMgcGVyIGNlbnN1cyB0cmFjdC4gVGhlc2UgZGF0YSBhcmUgc3RvcmVkIGluIHRoZSBgcGN0RWxldmF0ZWRgIHZhcmlhYmxlLiBXZSB1c2UgdGhlIGBmaWxsYCBvcHRpb24gd2l0aGluIHRoZSBhZXN0aGV0aWMgbWFwcGluZyB0byBhY2NvbXBsaXNoIHRoaXMuIEl0IGlzIHRoZSAqb25seSogY2hhbmdlIGZyb20gb3VyIHByZXZpb3VzIG1hcCwgb3RoZXIgdGhhbiBzd2l0Y2hpbmcgdGhlIGRhdGEgc291cmNlLgoKYGBge3J9CmdncGxvdCgpICsKICAgIGdlb21fcG9seWdvbihkYXRhID0gbGVhZE1hcCwgbWFwcGluZyA9IGFlcyh4ID0gbG9uZywgeSA9IGxhdCwgZ3JvdXAgPSBpZCwgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZmlsbCA9IHBjdEVsZXZhdGVkKSkgKwogICAgY29vcmRfbWFwKCkKYGBgCgpOb3cgeW91IHRyeWluZyBjcmVhdGluZyBhIHBsb3Qgb2YgdGhlIGBwY3RVbmluc2AgZGF0YSAtIHRoZSBwZXJjZW50IHVuaW5zdXJlZCAtIGluIHRoZSBgaW5zTWFwYCBkYXRhIGZyYW1lLiBXZSd2ZSBzdGFydGVkIHRoZSBjb2RlIGhlcmUsIHlvdSBqdXN0IG5lZWQgdG8gYWRkIGluIHRoZSBgZmlsbCA9IHZhcmlhYmxlTmFtZWAgaW4gdGhlIGFwcHJvcHJpYXRlIHBsYWNlOgoKYGBge3J9CmdncGxvdCgpICsKICAgIGdlb21fcG9seWdvbihkYXRhID0gaW5zTWFwLCBtYXBwaW5nID0gYWVzKHggPSBsb25nLCB5ID0gbGF0LCBncm91cCA9IGlkKSkgKwogICAgY29vcmRfbWFwKCkKYGBgCgojIyMgRml4aW5nIHRoZSBDb2xvciBSYW1wClRoZSBkZWZhdWx0IGNvbG9yIHJhbXBzIHRoYXQgYFJgIHByZXNlbnRzIGFyZSBkaWZmaWN1bHQgdG8gaW50ZXJwcmV0LiBUaGUgYFJDb2xvckJyZXdlcmAgcGFja2FnZSB5b3UgaW5zdGFsbGVkIGVhcmxpZXIgcHJvdmlkZXMgdXMgd2l0aCBhIHJhbmdlIG9mIGNvbG9yIHJhbXBzIHRvIHNlbGVjdCBmcm9tLiBZb3UgY2FuIHZpZXcgdGhlc2UgdXNpbmcgdGhlIGZvbGxvd2luZyBmdW5jdGlvbjoKCmBgYHtyfQpkaXNwbGF5LmJyZXdlci5hbGwoKQpgYGAKCldlJ2xsIHN0YXJ0IGJ5IHVzaW5nIHRoZSBgc2NhbGVfZmlsbF9kaXN0aWxsZXIoKWAgZnVuY3Rpb24gdG8gY2hvb3NlIHRoZSBgIkdyZWVucyJgIHBhbGV0dGU6IAoKYGBge3J9CmdncGxvdCgpICsKICAgIGdlb21fcG9seWdvbihkYXRhID0gbGVhZE1hcCwgYWVzKHggPSBsb25nLCB5ID0gbGF0LCBncm91cCA9IGlkLCBmaWxsID0gcGN0RWxldmF0ZWQpKSArCiAgICBzY2FsZV9maWxsX2Rpc3RpbGxlcihwYWxldHRlID0gIkdyZWVucyIpICsKICAgIGNvb3JkX21hcCgpCmBgYAoKT25lIGlzc3VlIHdpdGggdGhpcyBjb2xvciByYW1wIGFib3ZlIGlzIHRoYXQgdGhlIGxpZ2h0ZXN0IGNvbG9ycyBjb3JyZXNwb25kIHRvIHRoZSB3b3JzdCBvdXRjb21lcy4gVHlwaWNhbGx5LCB3ZSB3YW50IHRvIGhpZ2hsaWdodCB0aG9zZSBhcmVhcyB3aXRoIHRoZSBoaWdoZXN0IHZhbHVlIChicmlnaHRlc3QpIGNvbG9ycyBpbiBvdXIgcmFtcC4gV2UgY2FuIGNyZWF0ZSBhIG1vcmUgaW50dWl0aXZlIG1hcCBieSBhZGRpbmcgdGhlIGB0cmFucyA9ICJyZXZlcnNlImAgb3B0aW9uIGludG8gdGhlIGBzY2FsZV9maWxsX2Rpc3RpbGxlcigpYCBmdW5jdGlvbjoKCmBgYHtyfQpnZ3Bsb3QoKSArCiAgICBnZW9tX3BvbHlnb24oZGF0YSA9IGxlYWRNYXAsIGFlcyh4ID0gbG9uZywgeSA9IGxhdCwgZ3JvdXAgPSBpZCwgZmlsbCA9IHBjdEVsZXZhdGVkKSkgKwogICAgc2NhbGVfZmlsbF9kaXN0aWxsZXIocGFsZXR0ZSA9ICJHcmVlbnMiLCB0cmFucyA9ICJyZXZlcnNlIikgKwogICAgY29vcmRfbWFwKCkKYGBgCgpOb3csIHlvdSB0cnkgYWRkaW5nIGEgYCJSZWRzImAgY29sb3IgcmFtcCBpbiByZXZlcnNlIG9yZGVyIHRvIHRoZSBjb2RlIHdlJ3ZlIHByb3ZpZGVkIHlvdSBiZWxvdywgd2hpY2ggbWFwcyB0aGUgYHBjdFVuaW5zYCB2YXJpYWJsZSBmcm9tIHRoZSBgaW5zTWFwYCBkYXRhOgoKYGBge3J9CmdncGxvdCgpICsKICAgIGdlb21fcG9seWdvbihkYXRhID0gaW5zTWFwLCBhZXMoeCA9IGxvbmcsIHkgPSBsYXQsIGdyb3VwID0gaWQsIGZpbGwgPSBwY3RVbmlucykpICsKICAgIGNvb3JkX21hcCgpCmBgYAoKIyMgUHV0dGluZyBJdCBBbGwgVG9nZXRoZXIKCkF0IHRoaXMgcG9pbnQsIHdlIGNhbiBjb21iaW5lIGJvdGggdGhlIGRhdGEgbGF5ZXIgYGdlb21gIGZyb20gdGhlIGBsZWFkTWFwYCBkYXRhIHdpdGggdGhlIGByaXZlcnNgIGRhdGEgdG8gcHJvZHVjZSBhIHNlcnZpY2VhYmxlIG1hcCBvZiBsZWFkIHBvaXNvbmluZyByYXRlcyBpbiB0aGUgQ2l0eSBvZiBTdC4gTG91aXM6CgpgYGB7cn0KZ2dwbG90KCkgKwogICAgZ2VvbV9wb2x5Z29uKGRhdGEgPSBsZWFkTWFwLCBhZXMoeCA9IGxvbmcsIHkgPSBsYXQsIGdyb3VwID0gaWQsIGZpbGwgPSBwY3RFbGV2YXRlZCkpICsKICAgIGdlb21fcG9seWdvbihkYXRhID0gcml2ZXJzLCBtYXBwaW5nID0gYWVzKHggPSBsb25nLCB5ID0gbGF0LCBncm91cCA9IGlkKSwgZmlsbCA9ICIjMDAwMDlkIiwgY29sb3IgPSAiIzAwMDA5ZCIpICsKICAgIHNjYWxlX2ZpbGxfZGlzdGlsbGVyKHBhbGV0dGUgPSAiR3JlZW5zIiwgdHJhbnMgPSAicmV2ZXJzZSIpICsKICAgIGNvb3JkX21hcCgpCmBgYAoKTm93LCB5b3UgdHJ5IGNyZWF0aW5nIGEgc2ltaWxhciBtYXAgdGhhdCBjb21iaW5lcyB0aGUgYHJpdmVyc2AgZGF0YSB3aXRoIHRoZSByYXRlcyBvZiB1bi1pbnN1cmFuY2UgaW4gdGhlIENpdHkgb2YgU3QuIExvdWlzOgoKYGBge3J9CgoKCmBgYAoKIyMgQWNjZXNzaW5nIERlbW9ncmFwaGljIERhdGEKCnRoZSBgc3RsTGVhZGAgZGF0YSBmcmFtZSBmcm9tIGBzdGxEYXRhYCBjb21lcyB3aXRoIGEgc2VsZWN0IGFtb3VudCBvZiBkZW1vZ3JhcGhpYyBkYXRhIGFib3V0IHRoZSBjaXR5LCBidXQgdGhlcmUgaXMgYSB3ZWFsdGggb2Ygb3RoZXIgaW5mb3JtYXRpb24gdGhhdCBpcyBhdmFpbGFibGUgdGhyb3VnaCB0aGUgVS5TLiBDZW5zdXMgQnVyZWF1LiBPYnRhaW5pbmcgdGhlc2UgZGF0YSB1c2VkIHRvIGJlIGFuIGFyZHVvdXMgcHJvY2Vzcy4gSG93ZXZlciwgS3lsZSBXYWxrZXIsIGEgcHJvZmVzc29yIGF0IFRDVSwgaGFzIHdyaXR0ZW4gYSBwYWNrYWdlIGNhbGxlZCBgdGlkeWNlbnN1c2AgdG8gbWFrZSBvYnRhaW5pbmcgdGhlc2UgZGF0YSBlYXNpZXIuCgojIyMgU2V0dGluZyBVcCB0aWR5ZW5zdXMKCkJlZm9yZSB3ZSB1c2UgYHRpZHljZW5zdXNgLCB3ZSBuZWVkIHRvIHRha2UgdGhlIFtBUEkga2V5XShodHRwczovL2FwaS5jZW5zdXMuZ292L2RhdGEva2V5X3NpZ251cC5odG1sKSB0aGF0IHdlIGFza2VkIHlvdSB0byBvYnRhaW4gYW5kIGVudGVyIGl0IGludG8gdGhlIGFyZWEgYmV0d2VlbiB0aGUgZG91YmxlIHF1b3RlczoKCmBgYHtyfQpjZW5zdXNfYXBpX2tleSgiWU9VUiBBUEkgS0VZIEdPRVMgSEVSRSIpCmBgYAoKWW91IHNob3VsZCBvbmx5IGhhdmUgdG8gZG8gdGhpcyBvbmNlIHBlciBjb21wdXRlci4KCiMjIyBWaWV3aW5nIFBvc3NpYmxlIFZhcmlhYmxlcwoKVGhlcmUgYXJlIHRob3VzYW5kcyBvZiBwb3NzaWJsZSB2YXJpYWJsZXMgd2l0aGluIHRoZSBDZW5zdXMgQnVyZWF1J3MgcHJvZHVjdHMuIFdlJ3JlIGdvaW5nIHRvIHB1bGwgYSBzcGVjaWZpYyB2YXJpYWJsZSwgdGhlIG1lZGlhbiBob3VzZWhvbGQgaW5jb21lLCBmcm9tIHRoZSAyMDE1IEFtZXJpY2FuIENvbW11bml0eSBTdXJ2ZXkncyAoQUNTKSA1LXllYXIgZXN0aW1hdGVzIGZvciBDaXR5IG9mIFN0LiBMb3VpcyBjZW5zdXMgdHJhY3RzLiBXZSBuZWVkIHRvIHNwZWNpZnkgdGhlIHZhcmlhYmxlIHdlIHdhbnQgYXMgd2VsbCBhcyB0aGUgQ2Vuc3VzIGRhdGEgcHJvZHVjdCwgaXRzIHZpbnRhZ2UsIGFuZCB0aGUgZ2VvZ3JhcGhpYyBwYXJhbWV0ZXJzIHdlIGFyZSBpbnRlcmVzdGVkIGluOgoKYGBge3J9Cm1lZGlhbkluYyA8LSBnZXRfYWNzKHZhcmlhYmxlcyA9ICJCMTkwMTNfMDAxIiwgc3VydmV5ID0gImFjczUiLCB5ZWFyID0gMjAxNSwgCiAgICAgICAgICAgICAgICAgICAgIGdlb2dyYXBoeSA9ICJ0cmFjdCIsIHN0YXRlID0gIk1PIiwgY291bnR5ID0gNTEwKQpgYGAKCmB0aWR5Y2Vuc3VzYCBwcm92aWRlcyBhIG51bWJlciBvZiB0b29scyBmb3IgbG9va2luZyB1cCBkaWZmZXJlbnQgbWVhc3VyZXMgaW4gdGhlIEFDUyBhcyB3ZWxsIGFzIHRoZSBkZWNlbm5pYWwgY2Vuc3VzIHRoYXQgYXJlIHdvcnRoIGV4cGxvcmluZyBvbiB5b3VyIG93bi4KCldpdGggdGhvc2UgZGF0YSBkb3dubG9hZGVkLCB3ZSBjYW4gZm9sbG93IGEgc2ltaWxhciBwcm9jZXNzIGFzIHdlIGRpZCBiZWZvcmUgZm9yIG1hcHBpbmcgdGhlc2UgZGF0YS4gV2UnbGwgcmVuYW1lIGBHRU9JRGAgdG8gYGlkYCwgdXNlIHRoZSBgbGVmdF9qb2luKClgIGZ1bmN0aW9uIGZyb20gYGRwbHlyYCB0byBjb21iaW5lIHRoZSBtZWRpYW4gaW5jb21lIGRhdGEgd2l0aCBvdXIgZ2VvbWV0cmljIGRhdGEgZm9yIFN0LiBMb3VpcyBjZW5zdXMgdHJhY3RzLCBhbmQgdGhlbiBidWlsZCBhIHBsb3QgYXJvdW5kIHRob3NlIGRhdGEgbGF5ZXJlZCB3aXRoIHRoZSByaXZlciBkYXRhLiBXZSd2ZSBzZWxlY3RlZCBhIGRpZmZlcmVudCBgUkNvbG9yQnJld2VyYCByYW1wIGhlcmUgLSBgIkJ1UHUiYCAoQmx1ZSBhbmQgUHVycGxlKS4KCmBgYHtyfQptZWRpYW5JbmMgPC0gcmVuYW1lKG1lZGlhbkluYywgaWQgPSBHRU9JRCkKCmluY01hcCA8LSBsZWZ0X2pvaW4oc3RsVHJhY3QsIG1lZGlhbkluYywgYnkgPSAiaWQiKQoKZ2dwbG90KCkgKwogICAgZ2VvbV9wb2x5Z29uKGRhdGEgPSBpbmNNYXAsIGFlcyh4ID0gbG9uZywgeSA9IGxhdCwgZ3JvdXAgPSBpZCwgZmlsbCA9IGVzdGltYXRlKSkgKwogICAgZ2VvbV9wb2x5Z29uKGRhdGEgPSByaXZlcnMsIG1hcHBpbmcgPSBhZXMoeCA9IGxvbmcsIHkgPSBsYXQsIGdyb3VwID0gaWQpLCBmaWxsID0gIiMwMDAwOWQiLCBjb2xvciA9ICIjMDAwMDlkIikgKwogICAgc2NhbGVfZmlsbF9kaXN0aWxsZXIocGFsZXR0ZSA9ICJCdVB1IiwgdHJhbnMgPSAicmV2ZXJzZSIpICsKICAgIGNvb3JkX21hcCgpCmBgYAoKTm93LCB5b3UgdHJ5IGRvd25sb2FkaW5nIHRoZSB2YXJpYWJsZSBgIkIwMTAwMUJfMDAxImAgKG51bWJlciBvZiBBZnJpY2FuIEFtZXJpY2FucykgZnJvbSB0aGUgMjAxNSA1LXllYXIgQUNTIGZvciBDaXR5IG9mIFN0LiBMb3VpcyBjZW5zdXMgdHJhY3RzLiBXZSd2ZSBnb3QgeW91IHN0YXJ0ZWQgYmVsb3c6CgpgYGB7cn0KY291bnRCbGFjayA8LSBnZXRfYWNzKHZhcmlhYmxlcyA9ICIiLCBzdXJ2ZXkgPSAiYWNzNSIsIHllYXIgPSAyMDE1LCAKICAgICAgICAgICAgICAgICAgICAgZ2VvZ3JhcGh5ID0gInRyYWN0Iiwgc3RhdGUgPSAiTU8iLCBjb3VudHkgPSA1MTApCmBgYAoKV2l0aCB0aG9zZSBkYXRhIGRvd25sb2FkZWQsIGZvbGxvdyB0aGUgc2FtZSBwcm9jZXNzIGFzIHdlIGRpZCBpbiB0aGUgcHJldmlvdXMgZXhhbXBsZToKCjEuIHJlbmFtZSBgR0VPSURgIHRvIGBpZGAsIAoyLiB1c2UgdGhlIGBsZWZ0X2pvaW4oKWAgZnVuY3Rpb24gZnJvbSBgZHBseXJgIHRvIGNvbWJpbmUgdGhlIG1lZGlhbiBpbmNvbWUgZGF0YSB3aXRoIG91ciBnZW9tZXRyaWMgZGF0YSBmb3IgU3QuIExvdWlzIGNlbnN1cyB0cmFjdHMsIAozLiBhbmQgdGhlbiBidWlsZCBhIHBsb3QgYXJvdW5kIHRob3NlIGRhdGEgbGF5ZXJlZCB3aXRoIHRoZSByaXZlciBkYXRhOwo0LiB1c2UgdGhlIGAiUmRQdSJgIChSZWQgUHVycGxlKSBjb2xvciByYW1wIGZvciB5b3VyIGRhdGEKCmBgYHtyfQoKCgpgYGAK</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiRFNTIEZhbGwgMjAxNyBTZW1pbmFyIDQiCm91dHB1dDogaHRtbF9ub3RlYm9vawphdXRob3JzOiBDaHJpcyAmIENocmlzdHkKLS0tCgojIyBJbnRyb2R1Y3Rpb24KVGhpcyBpcyB0aGUgbm90ZWJvb2sgZm9yIHRoZSBmaW5hbCBgUmAgc2VtaW5hciBzZXNzaW9uIGZvciBGYWxsIDIwMTcuCgojIyBEZXBlbmRlbmNpZXMKCllvdSB3aWxsIGFsc28gbmVlZCBhIG51bWJlciBvZiBvdGhlciBwYWNrYWdlcyB0aGF0IHdlJ3ZlIHdvcmtlZCB3aXRoIGluIHRoZSBwYXN0IHNlc3Npb25zOgoKYGBge3J9CiMgaW5zdGFsbCB1c2luZyBpbnN0YWxsLnBhY2thZ2VzKCJ0aWR5dmVyc2UiKQpsaWJyYXJ5KGJyb29tKSAgICAgICAgICMgdGlkeWluZyBkYXRhCmxpYnJhcnkoZHBseXIpICAgICAgICAgIyB3cmFuZ2xpbmcgZGF0YQpsaWJyYXJ5KGdncGxvdDIpICAgICAgICMgcGxvdHRpbmcgZGF0YQoKIyBpbnN0YWxsIGluZGl2aWR1YWxseSB1c2luZyBpbnN0YWxsLnBhY2thZ2VzKCkKbGlicmFyeShtYXBwcm9qKSAgICAgICAjIHRvb2xzIGZvciB3b3JraW5nIHdpdGggbWFwIHByb2plY3Rpb25zCmxpYnJhcnkobWFwdG9vbHMpICAgICAgIyB0b29scyBmb3Igd29ya2luZyB3aXRoIHNwYXRpYWwgZGF0YQpsaWJyYXJ5KFJDb2xvckJyZXdlcikgICMgY29sb3IgcmFtcHMKbGlicmFyeShyZ2RhbCkgICAgICAgICAjIHdvcmsgd2l0aCBzaGFwZWZpbGVzCmxpYnJhcnkodGlkeWNlbnN1cykgICAgIyBhY2Nlc3Npbmcgc3BhdGlhbCBkYXRhCgojIGluc3RhbGwgdXNpbmcgdGhlIGRldnRvb2xzIHBhY2thZ2UKIyBkZXZ0b29sczo6aW5zdGFsbF9naXRodWIoImNocmlzLXByZW5lci9zdGxEYXRhIikKbGlicmFyeShzdGxEYXRhKSAgICAgICAjIFN0LiBMb3VpcyBzcGF0aWFsIGRhdGEKYGBgCgojIyBSZXZpZXcgLSBHZXR0aW5nIEJhY2sgdG8gV2hlcmUgV2UgTGVmdCBPZmYKIyMjIFJlYWRpbmcgaW4gR2VvbWV0cmljIERhdGEKV2UgdXNlIHRoZSBgcmdkYWxgIHBhY2thZ2UgdG8gcmVhZCBzaGFwZWZpbGVzIGludG8gYFJgLiBUaGVzZSBkYXRhIG11c3QgYmUgaW4gdGhlICoqdG9wLWxldmVsKiogb2YgeW91ciBgUmAgcHJvamVjdCBkaXJlY3RvcnkuIFRvIGltcG9ydCBvbmUgb2Ygb3VyIGZpbGVzLCB0aGUgYHN0bFJpdmVyc2Agc2hhcGVmaWxlLCB3ZSB1c2UgdGhlIGByZWFkT0dSKClgIGZ1bmN0aW9uLiBXZSBuZWVkIHRvIHNwZWNpZnkgYGRzbiA9ICIuImAgZm9yIGVhY2ggdXNlIG9mIHRoZSBmdW5jdGlvbiwgYW5kIHRoZSBsYXllciBzaG91bGQgbWF0Y2ggdGhlIG5hbWUgb2YgeW91ciBzaGFwZWZpbGUuCgpPbmNlIGltcG9ydGVkLCB0aGVzZSBkYXRhIHdpbGwgYXBwZWFyIHVuZGVyIHRoZSAiVmFsdWVzIiBzZWN0aW9uIG9mIHRoZSBnbG9iYWwgZW52aXJvbm1lbnQgYXMgYW4gb2JqZWN0IG5hbWVkIGBpbXBvcnRgLiBIb3dldmVyLCB0aGV5IGFyZSBub3QgaW4gYSBkYXRhIGZyYW1lIHN0cnVjdHVyZS4gV2UgbmVlZCB0byB1c2UgdGhlIGBicm9vbWAgcGFja2FnZSdzIGB0aWR5KClgIGZ1bmN0aW9uIHRvIGRpcy1hZ2dyZWdhdGUgdGhlc2UgZGF0YSBhbmQgc3RvcmUgdGhlbSBpbiBhIGRhdGEgZnJhbWUuIFdlJ2xsIGRvIHRoaXMgYmFzZWQgb24gYSBjb21tb24gSUQgdmFyaWFibGUgbmFtZWQgYEdFT0lEYDoKCmBgYHtyfQppbXBvcnQgPC0gcmVhZE9HUihkc24gPSAiLiIsIGxheWVyID0gInN0bFRyYWN0IikKc3RsVHJhY3QgPC0gdGlkeShpbXBvcnQsIHJlZ2lvbiA9ICJHRU9JRCIpCmBgYAoKIyMjIExlYWQgUG9pc29uaW5nIERhdGEKCldlIGFsc28gbmVlZCB0byBsb2FkIG91ciBkYXRhIG9uIGxlYWQgcG9pc29uaW5nIGFuZCBwcmVwYXJlIGl0IHRvIGJlIGpvaW5lZCB3aXRoIHRoZSBzaGFwZWZpbGUgZGF0YToKCmBgYHtyfQojIGxvYWQgZGF0YSBmcm9tIHBhY2thZ2UgaW50byBnbG9iYWwgZW52aXJvbm1lbnQKbGVhZCA8LSBzdGxMZWFkCgojIHByZXBhcmUgZm9yIGpvaW4KbGVhZCAlPiUKICByZW5hbWUoaWQgPSBnZW9JRCkgJT4lCiAgbXV0YXRlKGlkID0gYXMuY2hhcmFjdGVyKGlkKSkgLT4gbGVhZAoKIyBqb2luIHRhYnVsYXIgYW5kIGdlb21ldHJpYyBkYXRhCmxlYWRNYXAgPC0gbGVmdF9qb2luKHN0bFRyYWN0LCBsZWFkLCBieSA9ICJpZCIpCmBgYAoKT25jZSB0aGUgam9pbiBpcyBjb21wbGV0ZSwgd2UgY2FuIHVzZSBgZ2dwbG90MmAgdG8gbWFwIG91ciBkYXRhOgoKYGBge3J9CmdncGxvdCgpICsKICAgIGdlb21fcG9seWdvbihkYXRhID0gbGVhZE1hcCwgbWFwcGluZyA9IGFlcyh4ID0gbG9uZywgeSA9IGxhdCwgZ3JvdXAgPSBpZCwgZmlsbCA9IHBjdEVsZXZhdGVkKSkgKwogICAgY29vcmRfbWFwKCkKYGBgCgojIyMgSGVhbHRoIEluc3VyYW5jZSBEYXRhCgpXZSBjYW4gcmVwZWF0IHRoZSBzYW1lIHByb2Nlc3Mgd2l0aCB0aGUgdW5pbnN1cmFuY2UgZGF0YToKCmBgYHtyfQojIGxvYWQgZGF0YSBmcm9tIHBhY2thZ2UgaW50byBnbG9iYWwgZW52aXJvbm1lbnQKdW5pbnMgPC0gc3RsSW5zdXJhbmNlCgojIHByZXBhcmUgZm9yIGpvaW4KdW5pbnMgJT4lCiAgcmVuYW1lKGlkID0gZ2VvSUQpICU+JQogIG11dGF0ZShpZCA9IGFzLmNoYXJhY3RlcihpZCkpIC0+IHVuaW5zCgojIGpvaW4gdGFidWxhciBhbmQgZ2VvbWV0cmljIGRhdGEKaW5zTWFwIDwtIGxlZnRfam9pbihzdGxUcmFjdCwgdW5pbnMsIGJ5ID0gImlkIikKCiMgbWFrZSBhbiBpbml0aWFsIG1hcApnZ3Bsb3QoKSArCiAgICBnZW9tX3BvbHlnb24oZGF0YSA9IGluc01hcCwgbWFwcGluZyA9IGFlcyh4ID0gbG9uZywgeSA9IGxhdCwgZ3JvdXAgPSBpZCwgZmlsbCA9IHBjdFVuaW5zKSkgKwogICAgY29vcmRfbWFwKCkKYGBgCgojIyBGaXhpbmcgdGhlIENvbG9yIFJhbXAKVGhlIGRlZmF1bHQgY29sb3IgcmFtcHMgdGhhdCBgUmAgcHJlc2VudHMgYXJlIGRpZmZpY3VsdCB0byBpbnRlcnByZXQuIFRoZSBgUkNvbG9yQnJld2VyYCBwYWNrYWdlIHlvdSBpbnN0YWxsZWQgZWFybGllciBwcm92aWRlcyB1cyB3aXRoIGEgcmFuZ2Ugb2YgY29sb3IgcmFtcHMgdG8gc2VsZWN0IGZyb20uIFlvdSBjYW4gdmlldyB0aGVzZSB1c2luZyB0aGUgZm9sbG93aW5nIGZ1bmN0aW9uOgoKYGBge3J9CmRpc3BsYXkuYnJld2VyLmFsbCgpCmBgYAoKV2UnbGwgc3RhcnQgYnkgdXNpbmcgdGhlIGBzY2FsZV9maWxsX2Rpc3RpbGxlcigpYCBmdW5jdGlvbiB0byBjaG9vc2UgdGhlIGAiR3JlZW5zImAgcGFsZXR0ZTogCgpgYGB7cn0KZ2dwbG90KCkgKwogICAgZ2VvbV9wb2x5Z29uKGRhdGEgPSBsZWFkTWFwLCBhZXMoeCA9IGxvbmcsIHkgPSBsYXQsIGdyb3VwID0gaWQsIGZpbGwgPSBwY3RFbGV2YXRlZCkpICsKICAgIHNjYWxlX2ZpbGxfZGlzdGlsbGVyKHBhbGV0dGUgPSAiR3JlZW5zIikgKwogICAgY29vcmRfbWFwKCkKYGBgCgpPbmUgaXNzdWUgd2l0aCB0aGlzIGNvbG9yIHJhbXAgYWJvdmUgaXMgdGhhdCB0aGUgbGlnaHRlc3QgY29sb3JzIGNvcnJlc3BvbmQgdG8gdGhlIHdvcnN0IG91dGNvbWVzLiBUeXBpY2FsbHksIHdlIHdhbnQgdG8gaGlnaGxpZ2h0IHRob3NlIGFyZWFzIHdpdGggdGhlIGhpZ2hlc3QgdmFsdWUgKGJyaWdodGVzdCkgY29sb3JzIGluIG91ciByYW1wLiBXZSBjYW4gY3JlYXRlIGEgbW9yZSBpbnR1aXRpdmUgbWFwIGJ5IGFkZGluZyB0aGUgYHRyYW5zID0gInJldmVyc2UiYCBvcHRpb24gaW50byB0aGUgYHNjYWxlX2ZpbGxfZGlzdGlsbGVyKClgIGZ1bmN0aW9uOgoKYGBge3J9CmdncGxvdCgpICsKICAgIGdlb21fcG9seWdvbihkYXRhID0gbGVhZE1hcCwgYWVzKHggPSBsb25nLCB5ID0gbGF0LCBncm91cCA9IGlkLCBmaWxsID0gcGN0RWxldmF0ZWQpKSArCiAgICBzY2FsZV9maWxsX2Rpc3RpbGxlcihwYWxldHRlID0gIkdyZWVucyIsIHRyYW5zID0gInJldmVyc2UiKSArCiAgICBjb29yZF9tYXAoKQpgYGAKCk5vdywgeW91IHRyeSBhZGRpbmcgYSBgIlJlZHMiYCBjb2xvciByYW1wIGluIHJldmVyc2Ugb3JkZXIgdG8gdGhlIGNvZGUgd2UndmUgcHJvdmlkZWQgeW91IGJlbG93LCB3aGljaCBtYXBzIHRoZSBgcGN0VW5pbnNgIHZhcmlhYmxlIGZyb20gdGhlIGBpbnNNYXBgIGRhdGE6CgpgYGB7cn0KZ2dwbG90KCkgKwogICAgZ2VvbV9wb2x5Z29uKGRhdGEgPSBpbnNNYXAsIGFlcyh4ID0gbG9uZywgeSA9IGxhdCwgZ3JvdXAgPSBpZCwgZmlsbCA9IHBjdFVuaW5zKSkgKwogICAgY29vcmRfbWFwKCkKYGBgCgojIyBSZW1vdmluZyBTb21lIG9mIHRoZSBnZ3Bsb3QyIEVsZW1lbnRzCgpUbyBnZXQgdGhlIHBsb3QgcmVhZHkgZm9yIHByZXNlbnRhdGlvbiwgd2Ugd2FudCB0byBhZGQgYSBjb3VwbGUgb2YgZGV0YWlscyBhbmQgcmVtb3ZlIHNvbWUgb2YgdGhlIGBnZ3Bsb3RgIGVsZW1lbnRzLiBUaGUgZGV0YWlscyB3ZSB3YW50IHRvIGFkZCBhcmU6CgoqIGEgdGl0bGUsCiogYSBzdWJ0aXRsZSwKKiBhbmQgYSBjbGVhcmVyIHRpdGxlIGZvciB0aGUgbGVnZW5kLiAKCldlIGNhbiBhZGQgYWxsIG9mIHRoZXNlIHVzaW5nIHRoZSBgbGFicygpYCBmdW5jdGlvbiwgd2hpY2ggYWNjZXB0cyBhcmd1bWVudHMgZm9yIChhbW9uZyBvdGhlciB0aGluZ3MpIGB0aXRsZWAsIGBzdWJ0aXRsZWAsIGFuZCBgZmlsbGAuIE5vdGUgdGhlIGNvbW1hcyBhZnRlciBlYWNoIGFyZ3VtZW50LCBhbmQgdGhlIHVzZSBvZiBgXG5gIHRvIGFkZCBhIGxpbmUgYnJlYWsgaW4gdGhlIHRpdGxlLiBXZSd2ZSBhbHNvIGNoYW5nZWQgdGhlIGNvbG9yIHJhbXAgdG8gdGhlIGAiUHVycGxlcyJgIHBhbGV0dGUgZnJvbSBgUkNvbG9yQnJld2VyYDoKCmBgYHtyfQpnZ3Bsb3QoKSArCiAgICBnZW9tX3BvbHlnb24oZGF0YSA9IGxlYWRNYXAsIGFlcyh4ID0gbG9uZywgeSA9IGxhdCwgZ3JvdXAgPSBpZCwgZmlsbCA9IHBjdEVsZXZhdGVkKSkgKwogICAgc2NhbGVfZmlsbF9kaXN0aWxsZXIocGFsZXR0ZSA9ICJQdXJwbGVzIiwgdHJhbnMgPSAicmV2ZXJzZSIpICsKICAgIGNvb3JkX21hcCgpICsKICAgIGxhYnMoCiAgICAgIHRpdGxlID0gIlBlcmNlbnRhZ2Ugb2YgQ2hpbGRyZW4gVGVzdGVkIFxud2l0aCBCbG9vZCBMZWFkIExldmVscyA+NcK1Zy9kTCIsIAogICAgICBzdWJ0aXRsZSA9ICJTdC4gTG91aXMsIE1pc3NvdXJpIiwKICAgICAgZmlsbCA9ICIlIEVsZXZhdGVkIikKYGBgCgpUaGUgZ3JheSBiYWNrZ3JvdW5kIGFuZCB0aGUgbGF0aXR1ZGUgYW5kIGxvbmdpdHVkZSBpbmZvcm1hdGlvbiBpcyBub3QgcGFydGljdWxhcmx5IGluZm9ybWF0aXZlIGhlcmUuIFdlIGNhbiByZW1vdmUgaXQgYnkgYWRkaW5nIHRoZSBgdGhlbWVfdm9pZCgpYCBmdW5jdGlvbiB0byBvdXIgYGdncGxvdCgpYCBjYWxsOgoKYGBge3J9CmdncGxvdCgpICsKICAgIGdlb21fcG9seWdvbihkYXRhID0gbGVhZE1hcCwgYWVzKHggPSBsb25nLCB5ID0gbGF0LCBncm91cCA9IGlkLCBmaWxsID0gcGN0RWxldmF0ZWQpKSArCiAgICBzY2FsZV9maWxsX2Rpc3RpbGxlcihwYWxldHRlID0gIlB1cnBsZXMiLCB0cmFucyA9ICJyZXZlcnNlIikgKwogICAgY29vcmRfbWFwKCkgKwogICAgbGFicygKICAgICAgdGl0bGUgPSAiUGVyY2VudGFnZSBvZiBDaGlsZHJlbiBUZXN0ZWQgXG53aXRoIEJsb29kIExlYWQgTGV2ZWxzID41wrVnL2RMIiwgCiAgICAgIHN1YnRpdGxlID0gIlN0LiBMb3VpcywgTWlzc291cmkiLAogICAgICBmaWxsID0gIiUgRWxldmF0ZWQiKSArCiAgICB0aGVtZV92b2lkKCkKYGBgCgpUcnkgY29tYmluaW5nIGJvdGggb2YgdGhlc2UgYWx0ZXJhdGlvbnMgdG8gdGhlIGluc3VyYW5jZSBkYXRhLiBXZSd2ZSBnaXZlbiB5b3Ugc29tZSBjb2RlIHRvIGdldCBzdGFydGVkLiBUaGUgY2hhbmdlcyB5b3Ugc2hvdWxkIG1ha2U6CgoqIEFkZCBhIHRpdGxlIGRlc2NyaWJpbmcgd2hhdCB0aGUgbWFwIHNob3dzCiogQWRkIGEgc3VidGl0bGUgbm90aW5nIHRoYXQgdGhlIGRhdGEgYXJlIGZvciBTdC4gTG91aXMsIE1pc3NvdXJpCiogQWRkIGEgYmV0dGVyIGxlZ2VuZCB0aXRsZQoqIFJlbW92ZSB0aGUgYGdncGxvdDJgIHRoZW1lIGVsZW1lbnRzCgpgYGB7cn0KZ2dwbG90KCkgKwogICAgZ2VvbV9wb2x5Z29uKGRhdGEgPSBpbnNNYXAsIGFlcyh4ID0gbG9uZywgeSA9IGxhdCwgZ3JvdXAgPSBpZCwgZmlsbCA9IHBjdFVuaW5zKSkgKwogICAgc2NhbGVfZmlsbF9kaXN0aWxsZXIocGFsZXR0ZSA9ICJPcmFuZ2VzIiwgdHJhbnMgPSAicmV2ZXJzZSIpICsKICAgIGNvb3JkX21hcCgpCmBgYAoKIyMgQWNjZXNzaW5nIERlbW9ncmFwaGljIERhdGEKCnRoZSBgc3RsTGVhZGAgZGF0YSBmcmFtZSBmcm9tIGBzdGxEYXRhYCBjb21lcyB3aXRoIGEgc2VsZWN0IGFtb3VudCBvZiBkZW1vZ3JhcGhpYyBkYXRhIGFib3V0IHRoZSBjaXR5LCBidXQgdGhlcmUgaXMgYSB3ZWFsdGggb2Ygb3RoZXIgaW5mb3JtYXRpb24gdGhhdCBpcyBhdmFpbGFibGUgdGhyb3VnaCB0aGUgVS5TLiBDZW5zdXMgQnVyZWF1LiBPYnRhaW5pbmcgdGhlc2UgZGF0YSB1c2VkIHRvIGJlIGFuIGFyZHVvdXMgcHJvY2Vzcy4gSG93ZXZlciwgS3lsZSBXYWxrZXIsIGEgcHJvZmVzc29yIGF0IFRDVSwgaGFzIHdyaXR0ZW4gYSBwYWNrYWdlIGNhbGxlZCBgdGlkeWNlbnN1c2AgdG8gbWFrZSBvYnRhaW5pbmcgdGhlc2UgZGF0YSBlYXNpZXIuCgojIyMgU2V0dGluZyBVcCB0aWR5ZW5zdXMKCkJlZm9yZSB3ZSB1c2UgYHRpZHljZW5zdXNgLCB3ZSBuZWVkIHRvIHRha2UgdGhlIFtBUEkga2V5XShodHRwczovL2FwaS5jZW5zdXMuZ292L2RhdGEva2V5X3NpZ251cC5odG1sKSB0aGF0IHdlIGFza2VkIHlvdSB0byBvYnRhaW4gYW5kIGVudGVyIGl0IGludG8gdGhlIGFyZWEgYmV0d2VlbiB0aGUgZG91YmxlIHF1b3RlczoKCmBgYHtyfQpjZW5zdXNfYXBpX2tleSgiWU9VUiBBUEkgS0VZIEdPRVMgSEVSRSIpCmBgYAoKWW91IHNob3VsZCBvbmx5IGhhdmUgdG8gZG8gdGhpcyBvbmNlIHBlciBjb21wdXRlci4KCiMjIyBEb3dubG9hZGluZyBkYXRhCgpUaGVyZSBhcmUgdGhvdXNhbmRzIG9mIHBvc3NpYmxlIHZhcmlhYmxlcyB3aXRoaW4gdGhlIENlbnN1cyBCdXJlYXUncyBwcm9kdWN0cy4gV2UncmUgZ29pbmcgdG8gcHVsbCBhIHNwZWNpZmljIHZhcmlhYmxlLCB0aGUgbWVkaWFuIGhvdXNlaG9sZCBpbmNvbWUsIGZyb20gdGhlIDIwMTUgQW1lcmljYW4gQ29tbXVuaXR5IFN1cnZleSdzIChBQ1MpIDUteWVhciBlc3RpbWF0ZXMgZm9yIENpdHkgb2YgU3QuIExvdWlzIGNlbnN1cyB0cmFjdHMuIFdlIG5lZWQgdG8gc3BlY2lmeSB0aGUgdmFyaWFibGUgd2Ugd2FudCBhcyB3ZWxsIGFzIHRoZSBDZW5zdXMgZGF0YSBwcm9kdWN0LCBpdHMgdmludGFnZSwgYW5kIHRoZSBnZW9ncmFwaGljIHBhcmFtZXRlcnMgd2UgYXJlIGludGVyZXN0ZWQgaW46CgpgYGB7cn0KbWVkaWFuSW5jIDwtIGdldF9hY3ModmFyaWFibGVzID0gIkIxOTAxM18wMDEiLCBzdXJ2ZXkgPSAiYWNzNSIsIHllYXIgPSAyMDE1LCAKICAgICAgICAgICAgICAgICAgICAgZ2VvZ3JhcGh5ID0gInRyYWN0Iiwgc3RhdGUgPSAiTU8iLCBjb3VudHkgPSA1MTApCmBgYAoKYHRpZHljZW5zdXNgIHByb3ZpZGVzIGEgbnVtYmVyIG9mIHRvb2xzIGZvciBsb29raW5nIHVwIGRpZmZlcmVudCBtZWFzdXJlcyBpbiB0aGUgQUNTIGFzIHdlbGwgYXMgdGhlIGRlY2VubmlhbCBjZW5zdXMgdGhhdCBhcmUgd29ydGggZXhwbG9yaW5nIG9uIHlvdXIgb3duLgoKV2l0aCB0aG9zZSBkYXRhIGRvd25sb2FkZWQsIHdlIGNhbiBmb2xsb3cgYSBzaW1pbGFyIHByb2Nlc3MgYXMgd2UgZGlkIGJlZm9yZSBmb3IgbWFwcGluZyB0aGVzZSBkYXRhLiBXZSdsbCByZW5hbWUgYEdFT0lEYCB0byBgaWRgLCB1c2UgdGhlIGBsZWZ0X2pvaW4oKWAgZnVuY3Rpb24gZnJvbSBgZHBseXJgIHRvIGNvbWJpbmUgdGhlIG1lZGlhbiBpbmNvbWUgZGF0YSB3aXRoIG91ciBnZW9tZXRyaWMgZGF0YSBmb3IgU3QuIExvdWlzIGNlbnN1cyB0cmFjdHMsIGFuZCB0aGVuIGJ1aWxkIGEgcGxvdCBhcm91bmQgdGhvc2UgZGF0YSBsYXllcmVkIHdpdGggdGhlIHJpdmVyIGRhdGEuIFdlJ3ZlIHNlbGVjdGVkIGEgZGlmZmVyZW50IGBSQ29sb3JCcmV3ZXJgIHJhbXAgaGVyZSAtIGAiQnVQdSJgIChCbHVlIGFuZCBQdXJwbGUpLgoKYGBge3J9Cm1lZGlhbkluYyA8LSByZW5hbWUobWVkaWFuSW5jLCBpZCA9IEdFT0lEKQoKaW5jTWFwIDwtIGxlZnRfam9pbihzdGxUcmFjdCwgbWVkaWFuSW5jLCBieSA9ICJpZCIpCgpnZ3Bsb3QoKSArCiAgICBnZW9tX3BvbHlnb24oZGF0YSA9IGluY01hcCwgYWVzKHggPSBsb25nLCB5ID0gbGF0LCBncm91cCA9IGlkLCBmaWxsID0gZXN0aW1hdGUpKSArCiAgICBzY2FsZV9maWxsX2Rpc3RpbGxlcihwYWxldHRlID0gIkJ1UHUiLCB0cmFucyA9ICJyZXZlcnNlIikgKwogICAgY29vcmRfbWFwKCkgKwogICAgbGFicygKICAgICAgdGl0bGUgPSAiTWVkaWFuIEluY29tZSBieSBDZW5zdXMgVHJhY3QsIDIwMTEtMjAxNSIsIAogICAgICBzdWJ0aXRsZSA9ICJTdC4gTG91aXMsIE1pc3NvdXJpIiwKICAgICAgZmlsbCA9ICJNZWRpYW4gXG5JbmNvbWUiKSArCiAgICB0aGVtZV92b2lkKCkKYGBgCgpOb3csIHlvdSB0cnkgZG93bmxvYWRpbmcgdGhlIHZhcmlhYmxlIGAiQjAxMDAxQl8wMDEiYCAobnVtYmVyIG9mIEFmcmljYW4gQW1lcmljYW5zKSBmcm9tIHRoZSAyMDE1IDUteWVhciBBQ1MgZm9yIENpdHkgb2YgU3QuIExvdWlzIGNlbnN1cyB0cmFjdHMuIFdlJ3ZlIGdvdCB5b3Ugc3RhcnRlZCBiZWxvdzoKCmBgYHtyfQpjb3VudEJsYWNrIDwtIGdldF9hY3ModmFyaWFibGVzID0gIiIsIHN1cnZleSA9ICJhY3M1IiwgeWVhciA9IDIwMTUsIAogICAgICAgICAgICAgICAgICAgICBnZW9ncmFwaHkgPSAidHJhY3QiLCBzdGF0ZSA9ICJNTyIsIGNvdW50eSA9IDUxMCkKYGBgCgpXaXRoIHRob3NlIGRhdGEgZG93bmxvYWRlZCwgZm9sbG93IHRoZSBzYW1lIHByb2Nlc3MgYXMgd2UgZGlkIGluIHRoZSBwcmV2aW91cyBleGFtcGxlOgoKMS4gcmVuYW1lIGBHRU9JRGAgdG8gYGlkYCwgCjIuIHVzZSB0aGUgYGxlZnRfam9pbigpYCBmdW5jdGlvbiBmcm9tIGBkcGx5cmAgdG8gY29tYmluZSB0aGUgbWVkaWFuIGluY29tZSBkYXRhIHdpdGggb3VyIGdlb21ldHJpYyBkYXRhIGZvciBTdC4gTG91aXMgY2Vuc3VzIHRyYWN0cywgCjMuIGFuZCB0aGVuIGJ1aWxkIGEgcGxvdCB1c2luZyB0aGUgYCJSZFB1ImAgKFJlZCBQdXJwbGUpIGNvbG9yIHJhbXAgZm9yIHlvdXIgZGF0YQoKYGBge3J9CgoKCmBgYAo=</div>
 
 
 
